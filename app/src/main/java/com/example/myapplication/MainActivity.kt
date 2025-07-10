@@ -22,6 +22,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.myapplication.ui.shared.context.auth.AuthModelView
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.getValue
+import com.example.myapplication.ui.Navigation
 import com.example.myapplication.ui.screens.News.News
 import com.example.myapplication.ui.screens.Settings.Settings
 
@@ -32,34 +33,16 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             MyApplicationTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    val navController = rememberNavController();
                     var authModelViewContext : AuthModelView = viewModel();
                     val isAuth : Boolean by authModelViewContext.authState.observeAsState(false);
 
                     if(isAuth){
                         println("LOGIN SUCCESS !!!")
-
-                        NavHost(
-                            navController = navController,
-                            startDestination = AppScreen.Home.name,
-                            modifier = Modifier.padding(innerPadding)
-                        ) {
-                            composable(route= AppScreen.Home.name){
-                                Home(navController)
-                            }
-                            composable(route= AppScreen.Settings.name){
-                                Settings(navController)
-                            }
-                            composable(route= AppScreen.News.name){
-                                News(navController)
-                            }
-
-                        }
+                        Navigation(authModelViewContext);
                     }else{
-                        Login(navController, {authModelViewContext.login()})
+                        Login(authModelViewContext)
                     }
-                }
+
             }
         }
     }

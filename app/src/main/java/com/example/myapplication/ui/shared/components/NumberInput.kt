@@ -1,6 +1,10 @@
 package com.example.myapplication.ui.shared.components
 
 import androidx.compose.foundation.layout.width
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Info
+import androidx.compose.material.icons.filled.Lock
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
@@ -15,6 +19,7 @@ fun NumberInput(inputValue:Int = 0, label: String= "Default-number-input", place
         onValueChange = { enterValue -> println(enterValue)},
         placeholder = { Text(placeholder) },
         modifier = modifier,
-        readOnly = isReadOnly
+        readOnly = isReadOnly,
+        leadingIcon = { Icon(imageVector = Icons.Default.Info, contentDescription = "") }
     )
 }

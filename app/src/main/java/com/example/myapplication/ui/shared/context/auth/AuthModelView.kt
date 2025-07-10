@@ -8,21 +8,39 @@ class AuthModelView : ViewModel() {
 
     private val _authState : MutableLiveData<Boolean> = MutableLiveData(false);
     val authState : LiveData<Boolean> = _authState;
-    private var userAccount = "";
-    private var userPassword = "";
+    private val _userAccount : MutableLiveData<String> = MutableLiveData("");
+    val userAccount : LiveData<String> = _userAccount;
+    private val _userPassword : MutableLiveData<String> = MutableLiveData("");
+    val userPassword : LiveData<String> = _userPassword;
 
     fun getAppAuthState() : Boolean {
-        return authState.value;
+        return _authState.value;
     }
 
+    fun setAppAuthState(){
+        this._authState.value = false;
+    }
 
-    fun login(){
-        println("START LOGIN")
-        _authState.value = true;
+    fun getUserAccount() : String{
+        return _userAccount.value;
+    }
+
+    fun login(userName: String,
+              userPassword: String){
+        if(userName.isNotEmpty() && userPassword.isNotEmpty()){
+            // Calling API TO AUTHENTICATE
+            // Storing Information
+            this._userAccount.value = userName;
+            this._userPassword.value = userPassword;
+            this._authState.value = true;
+        }else{
+            _authState.value = false;
+        }
     }
 
     fun signIn(
-
+        userName: String,
+        userPassword: String
     ){
 
     }
