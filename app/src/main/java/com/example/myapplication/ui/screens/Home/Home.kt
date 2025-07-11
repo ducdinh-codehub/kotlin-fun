@@ -78,7 +78,7 @@ fun Home(navHostController: NavHostController, authModelView: AuthModelView) {
             }
             Button(
                 onClick = {
-                    authModelView.setAppAuthState();
+                    authModelView.signOut();
                 }
             ) { Text("Sign out") }
         }

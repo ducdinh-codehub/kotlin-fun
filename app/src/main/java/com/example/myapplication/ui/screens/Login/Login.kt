@@ -1,5 +1,6 @@
 package com.example.myapplication.ui.screens.Login
 
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.basicMarquee
 import androidx.compose.foundation.layout.Arrangement
@@ -24,7 +25,9 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -32,6 +35,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
@@ -45,43 +49,36 @@ import com.airbnb.lottie.compose.LottieConstants
 import com.airbnb.lottie.compose.animateLottieCompositionAsState
 import com.airbnb.lottie.compose.rememberLottieComposition
 import com.example.myapplication.R
+import com.example.myapplication.ui.AppScreen
 import com.example.myapplication.ui.shared.components.DatePickerModal
 import com.example.myapplication.ui.shared.components.NumberInput
 import com.example.myapplication.ui.shared.components.TextInput
 import com.example.myapplication.ui.shared.context.auth.AuthModelView
+import com.example.myapplication.ui.shared.context.auth.FirebaseAuthState
+import com.example.myapplication.ui.shared.utilizeFunctions.getScreenHeight
+import com.example.myapplication.ui.shared.utilizeFunctions.getScreenWidth
+import com.example.myapplication.ui.shared.utilizeFunctions.getStatusBarHeight
 import com.example.myapplication.ui.theme.Green300
 import com.example.myapplication.ui.theme.black
 import com.example.myapplication.ui.theme.monk01
 
-
 @Composable
-fun getStatusBarHeight(): Dp {
-    val configuration = LocalConfiguration.current;
-    var statusBarHeightDp by remember { mutableStateOf(0.dp) }
-    with(LocalDensity.current) {
-        statusBarHeightDp = WindowInsets.statusBars.getTop(this).toDp()
+fun Login(navHostController: NavHostController, authModelView: AuthModelView) {
+
+    val firebaseAuthState = authModelView.firebaseAuthState.observeAsState();
+    val context = LocalContext.current;
+
+    LaunchedEffect(firebaseAuthState.value) {
+
+        println("Firebase recomposition" + firebaseAuthState.value);
+        when(firebaseAuthState.value){
+            is FirebaseAuthState.Authenticated -> authModelView.setAppAuthState(true);
+            is FirebaseAuthState.Error -> Toast.makeText(context, (firebaseAuthState.value as FirebaseAuthState.Error).message, Toast.LENGTH_SHORT).show();
+            else -> Unit
+        }
+
     }
-    return statusBarHeightDp;
-}
 
-@Composable
-fun getScreenHeight(): Dp {
-    val configuration = LocalConfiguration.current;
-    var navBarHeightDp by remember { mutableStateOf(0.dp) }
-    with(LocalDensity.current) {
-        navBarHeightDp =  WindowInsets.navigationBars.getBottom(this).toDp()
-    }
-    return configuration.screenHeightDp.dp + navBarHeightDp;
-}
-
-@Composable
-fun getScreenWidth(): Dp {
-    val configuration = LocalConfiguration.current;
-    return configuration.screenWidthDp.dp;
-}
-
-@Composable
-fun Login(authModelView: AuthModelView) {
     var openCalendarState by remember { mutableStateOf(false) }// Declare a mutable state for the text
 
     val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.loginanimation))
@@ -122,7 +119,7 @@ fun Login(authModelView: AuthModelView) {
                     .width(getScreenWidth())
                     .height(getScreenHeight().plus(100.dp)).background(monk01),
                 ) {
-                Column(verticalArrangement = Arrangement.spacedBy(35.dp), horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.background(Green300).width(getScreenWidth()).height(525.dp).padding(vertical = getStatusBarHeight().plus(25.dp))){
+                Column(verticalArrangement = Arrangement.spacedBy(35.dp), horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.background(Green300).width(getScreenWidth()).height(525.dp).padding(vertical = getStatusBarHeight().plus(35.dp))){
                     Text("Welcome, searching for solution", fontSize = 23.sp, fontWeight = FontWeight.Bold)
                     TextInput(modifier = Modifier
                         .width(350.dp)
@@ -135,6 +132,7 @@ fun Login(authModelView: AuthModelView) {
                             RoundedCornerShape(25.dp)
                         ), label = "Password", placeholder = "Enter Password", onTyping = {e -> setPassword(e)}, isPasswordField = true, notAllowEmpty = true, isFailToLogin = isLoginSuccess)
 
+                    /*
                     Row(
                         horizontalArrangement = Arrangement.spacedBy(35.dp)
                     ){
@@ -149,32 +147,29 @@ fun Login(authModelView: AuthModelView) {
                             ) {
                             Icon(Icons.Rounded.DateRange, contentDescription = "Localized description", modifier = Modifier.size(30.dp))
                         }
-                    }
+                    }*/
 
                     Row(
                         horizontalArrangement = Arrangement.spacedBy(25.dp)
                     ) {
                         Button(onClick = {
-                            println("username"+ username);
-
-                            println("password" + password);
                             if(username.isNotEmpty() && password.isNotEmpty()){
                                 authModelView.login(username, password)
                             }else{
                                 isLoginSuccess.value = false
                             }
-
-
                         }, colors = ButtonDefaults.buttonColors(containerColor = black) ){
-                            Text("Login")
+                            Text("Đăng nhập")
                         }
-                        Button(onClick = {}, colors = ButtonDefaults.buttonColors(containerColor = black)){
-                            Text("Sign up")
+                        Button(onClick = {
+                            navHostController.navigate(route = AppScreen.Signup.name)
+                        }, colors = ButtonDefaults.buttonColors(containerColor = black)){
+                            Text("Đăng ký")
                         }
                     }
                 }
 
-                DatePickerModal({}, onDismiss = {changeStateOpenCalendar()}, openCalendarState)
+                //DatePickerModal({}, onDismiss = {changeStateOpenCalendar()}, openCalendarState)
 
                 Column(
                     modifier = Modifier.width(getScreenWidth()).height(250.dp).offset(y = -90.dp)
@@ -183,7 +178,7 @@ fun Login(authModelView: AuthModelView) {
                 }
 
                 Column(modifier = Modifier.width(getScreenWidth()).height(250.dp)) {
-                    Text("\uD83C\uDF3F\u200B Smart Agriculture Solutions \uD83C\uDF3F\u200B Diagnose Leaf Disease \uD83C\uDF3F\u200B Diagnose Plant Disease \uD83C\uDF3F\u200B Smart Agriculture Bot", modifier = Modifier.basicMarquee(
+                    Text("\uD83C\uDF3F\u200B Smart Agriculture Solutions \uD83C\uDF3F\u200B Diagnose Leaf Disease \uD83C\uDF3F\u200B Diagnose Plan Disease \uD83C\uDF3F\u200B Smart Agriculture Bot", modifier = Modifier.basicMarquee(
                     ), fontSize = 19.sp, fontWeight = FontWeight.Bold)
                 }
 

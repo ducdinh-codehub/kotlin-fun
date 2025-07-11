@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
@@ -33,16 +34,8 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             MyApplicationTheme {
-                    var authModelViewContext : AuthModelView = viewModel();
-                    val isAuth : Boolean by authModelViewContext.authState.observeAsState(false);
-
-                    if(isAuth){
-                        println("LOGIN SUCCESS !!!")
-                        Navigation(authModelViewContext);
-                    }else{
-                        Login(authModelViewContext)
-                    }
-
+                var authModelViewContext : AuthModelView = viewModel();
+                Navigation(authModelViewContext);
             }
         }
     }
