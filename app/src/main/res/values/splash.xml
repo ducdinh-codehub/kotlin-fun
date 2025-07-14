@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+     <style name="Theme.Starting.AgriApp" parent="Theme.SplashScreen">
+            <item name="windowSplashScreenBackground">
+                @color/white
+            </item>
+         <item name="windowSplashScreenAnimatedIcon">@drawable/_210_i201_004_f_m004_c9_modern_agricultural_machinery_isometric</item>
+         <item name="postSplashScreenTheme">@android:style/Theme.Material.NoActionBar</item>
+     </style>
+</resources>

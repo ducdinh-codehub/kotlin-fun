@@ -47,6 +47,7 @@ import com.example.myapplication.ui.screens.Login.Login
 import com.example.myapplication.ui.screens.News.News
 import com.example.myapplication.ui.screens.Settings.Settings
 import com.example.myapplication.ui.screens.Signup.Signup
+import com.example.myapplication.ui.screens.SplashScreen.SplashScreen
 import com.example.myapplication.ui.shared.context.auth.AuthModelView
 
 enum class AppScreen(val icon : ImageVector) {
@@ -54,8 +55,8 @@ enum class AppScreen(val icon : ImageVector) {
     Signup(Icons.Filled.AddCircle),
     Home(Icons.Filled.Home),
     News(Icons.Filled.Notifications),
-    Settings(Icons.Filled.Settings)
-
+    Settings(Icons.Filled.Settings),
+    Splash(Icons.Filled.Notifications)
 }
 
 @Composable
@@ -74,7 +75,7 @@ fun Navigation(authModelView: AuthModelView){
             bottomBar = {
                 NavigationBar(windowInsets = NavigationBarDefaults.windowInsets) {
                     AppScreen.entries.forEachIndexed { index, inAppScreen ->
-                        if(inAppScreen.name !== "Login" && inAppScreen.name !== "Signup"){
+                        if(inAppScreen.name !== "Login" && inAppScreen.name !== "Signup" && inAppScreen.name !== "Splash"){
                             NavigationBarItem(
                                 selected = selectedDestination == index,
                                 onClick = {
@@ -100,7 +101,7 @@ fun Navigation(authModelView: AuthModelView){
                 drawerContent = {
                     ModalDrawerSheet {
                         AppScreen.entries.forEachIndexed { index, inAppScreen ->
-                            if(inAppScreen.name !== "Login" && inAppScreen.name !== "Signup"){
+                            if(inAppScreen.name !== "Login" && inAppScreen.name !== "Signup" && inAppScreen.name !== "Splash"){
                                 NavigationDrawerItem(
                                     selected = selectedDestination == index,
                                     onClick = {

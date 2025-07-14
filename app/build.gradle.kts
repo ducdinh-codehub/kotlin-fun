@@ -54,6 +54,10 @@ dependencies {
     implementation(libs.androidx.material3)
     implementation(libs.androidx.runtime.livedata)
     implementation(libs.firebase.auth)
+    implementation(libs.androidx.appcompat)
+    implementation(libs.material)
+    implementation(libs.androidx.activity)
+    implementation(libs.androidx.constraintlayout)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
@@ -66,4 +70,5 @@ dependencies {
 
     implementation("io.ktor:ktor-client-core:3.2.1}")
     implementation("io.ktor:ktor-client-cio:3.2.1")
+    implementation("androidx.core:core-splashscreen:1.0.1")
 }

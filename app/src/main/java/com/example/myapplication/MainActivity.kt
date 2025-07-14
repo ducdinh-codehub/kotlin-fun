@@ -3,6 +3,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.*
@@ -23,6 +24,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.myapplication.ui.shared.context.auth.AuthModelView
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.getValue
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.example.myapplication.ui.Navigation
 import com.example.myapplication.ui.screens.News.News
 import com.example.myapplication.ui.screens.Settings.Settings
@@ -30,21 +32,13 @@ import com.example.myapplication.ui.screens.Settings.Settings
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
+        installSplashScreen()
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
         setContent {
             MyApplicationTheme {
                 var authModelViewContext : AuthModelView = viewModel();
                 Navigation(authModelViewContext);
             }
         }
-    }
-}
-
-@Preview(showBackground = true, backgroundColor = 0xFF00FFF0, fontScale = 1.2F )
-@Composable
-fun TestComponent() {
-    MyApplicationTheme {
-        DatePickerModal(onDateSelected = {}, onDismiss = {})
     }
 }
