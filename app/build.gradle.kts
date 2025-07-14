@@ -63,4 +63,7 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
     implementation("androidx.hilt:hilt-navigation-compose:1.0.0")
+
+    implementation("io.ktor:ktor-client-core:3.2.1}")
+    implementation("io.ktor:ktor-client-cio:3.2.1")
 }

@@ -1,5 +1,7 @@
 package com.example.myapplication.ui
 
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -12,6 +14,7 @@ import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.rounded.DateRange
 import androidx.compose.material3.Button
+import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.Icon
 import androidx.compose.material3.ModalDrawerSheet
 import androidx.compose.material3.ModalNavigationDrawer
@@ -20,11 +23,14 @@ import androidx.compose.material3.NavigationBarDefaults
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.NavigationDrawerItem
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
@@ -60,6 +66,7 @@ fun Navigation(authModelView: AuthModelView){
     val userAcc = authModelView.getUserAccount();
     println("Success loading")
     val isAuth : Boolean by authModelView.authState.observeAsState(false);
+    val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
 
     if(isAuth){
         Scaffold (
@@ -87,19 +94,44 @@ fun Navigation(authModelView: AuthModelView){
                 }
             }
         ){
-                contentPadding ->
-            NavHost(navController, startDestination.name, Modifier.padding(contentPadding)) {
-                composable(route= AppScreen.Home.name){
-                    Home(navController, authModelView)
+            contentPadding ->
+            ModalNavigationDrawer(
+                drawerState = drawerState,
+                drawerContent = {
+                    ModalDrawerSheet {
+                        AppScreen.entries.forEachIndexed { index, inAppScreen ->
+                            if(inAppScreen.name !== "Login" && inAppScreen.name !== "Signup"){
+                                NavigationDrawerItem(
+                                    selected = selectedDestination == index,
+                                    onClick = {
+                                        navController.navigate(route = inAppScreen.name)
+                                        selectedDestination = index
+                                    },
+                                    label={
+                                        Text(inAppScreen.name)
+                                    },
+                                    icon = {
+                                        Icon(Icons.Rounded.DateRange, contentDescription = "Localized description", modifier = Modifier.size(30.dp))
+                                    },
+                                )
+                            }
+
+                        }
+                    }
                 }
-                composable(route= AppScreen.Settings.name){
-                    Settings(navController)
-                }
-                composable(route= AppScreen.News.name){
-                    News(navController)
+            ){
+                NavHost(navController, startDestination.name) {
+                    composable(route= AppScreen.Home.name){
+                        Home(navController, authModelView, AppScreen.Home.name, drawerState)
+                    }
+                    composable(route= AppScreen.Settings.name){
+                        Settings(navController, authModelView, AppScreen.Settings.name, drawerState)
+                    }
+                    composable(route= AppScreen.News.name){
+                        News(navController, authModelView, AppScreen.News.name, drawerState)
+                    }
                 }
             }
-
         }
     }else {
         println("LOGIN SECTION")
