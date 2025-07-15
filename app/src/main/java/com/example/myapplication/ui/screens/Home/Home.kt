@@ -1,6 +1,8 @@
 package com.example.myapplication.ui.screens.Home
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.basicMarquee
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
@@ -11,6 +13,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -58,7 +61,10 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
@@ -77,6 +83,7 @@ import com.example.myapplication.R
 import com.example.myapplication.ui.theme.Blue200
 import com.example.myapplication.ui.theme.Green200
 import com.example.myapplication.ui.theme.Green300
+import com.example.myapplication.ui.theme.Grey100
 import com.example.myapplication.ui.theme.Grey400
 import com.example.myapplication.ui.theme.Grey500
 import com.example.myapplication.ui.theme.LightGreen100
@@ -110,8 +117,6 @@ fun Home(navHostController: NavHostController, authModelView: AuthModelView, top
     ) { innerPadding ->
         Column(
             Modifier
-                .width(getScreenWidth())
-                .height(getScreenHeight())
                 .background(Green50)
                 .padding(innerPadding)
                 .verticalScroll(
@@ -216,7 +221,7 @@ fun Home(navHostController: NavHostController, authModelView: AuthModelView, top
 
             Column (
                 Modifier
-                    .fillMaxWidth()
+                    .fillMaxWidth().height(580.dp)
                     .padding(vertical = 20.dp, horizontal = 8.dp), verticalArrangement = Arrangement.spacedBy(20.dp)) {
 
                 Row(horizontalArrangement = Arrangement.spacedBy(170 .dp)){
@@ -224,7 +229,33 @@ fun Home(navHostController: NavHostController, authModelView: AuthModelView, top
                     Text("See All")
                 }
 
-                Column(Modifier.fillMaxWidth().height(500.dp).background(Color.White, shape = RoundedCornerShape(15.dp))) {
+                Column(Modifier.fillMaxWidth().height(620.dp).background(Color.White, shape = RoundedCornerShape(15.dp)).padding(10.dp)) {
+                    Box(Modifier.background(color = Grey100, shape = RoundedCornerShape(15.dp)).padding(2.dp),) {
+                        Row(Modifier.padding(5.dp), verticalAlignment = Alignment.CenterVertically) {
+                            Icon(painterResource(R.drawable.article_person_24dp), contentDescription = "Localized description", Modifier.background(
+                                Grey50))
+                            Row(horizontalArrangement = Arrangement.SpaceBetween){
+                                Text("https://vnexpress.net/ho-dan-chuyen-dat-nong-nghiep-sang-dat-o-co-the-duoc-tinh-tien-su-dung-dat-theo-cach-cu-4913213.html", Modifier.basicMarquee())
+                            }
+
+                        }
+                    }
+
+                    Column(
+                        modifier = Modifier.width(getScreenWidth()).height(350.dp)
+                    ){
+                        Image( painterResource(R.drawable.demo_news_1), contentDescription = "", Modifier.size(450.dp, 500.dp).clip(RoundedCornerShape(16.dp)), contentScale = ContentScale.FillHeight)
+
+                    }
+
+                    Column(
+                        modifier = Modifier.fillMaxWidth().offset(y = -89.dp).background(Color.Black.copy(alpha = 0.5f), shape = RoundedCornerShape(15.dp)).padding(9.dp)
+
+                    ){
+                            Text("Hộ dân chuyển đất nông nghiệp sang đất ở có thể được tính tiền sử dụng đất theo cách cũ", color = Color.White)
+                    }
+
+
 
                 }
 
