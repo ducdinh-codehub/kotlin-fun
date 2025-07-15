@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.google.gms.google.services)
 }
 
@@ -42,9 +43,6 @@ android {
 
 dependencies {
     implementation(libs.androidx.core.ktx)
-    implementation("com.airbnb.android:lottie-compose:6.0.0")
-    implementation("androidx.navigation:navigation-compose:2.9.1")
-
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
     implementation(platform(libs.androidx.compose.bom))
@@ -66,9 +64,17 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
-    implementation("androidx.hilt:hilt-navigation-compose:1.0.0")
 
     implementation("io.ktor:ktor-client-core:3.2.1}")
     implementation("io.ktor:ktor-client-cio:3.2.1")
+    implementation("io.ktor:ktor-client-logging:3.2.1")
+    implementation("io.ktor:ktor-client-content-negotiation:3.2.1")
+    implementation("io.ktor:ktor-serialization-kotlinx-json:3.2.1")
+
+    implementation("androidx.hilt:hilt-navigation-compose:1.0.0")
     implementation("androidx.core:core-splashscreen:1.0.1")
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.3")
+    implementation("com.airbnb.android:lottie-compose:6.0.0")
+    implementation("androidx.navigation:navigation-compose:2.9.1")
+
 }

@@ -7,10 +7,13 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.myapplication.R
 import com.example.myapplication.ui.shared.api.WeatherClient
+import com.example.myapplication.ui.shared.context.auth.FirebaseAuthState
 import com.example.myapplication.ui.shared.dataModel.WeatherResponse
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
@@ -24,8 +27,8 @@ import java.io.BufferedReader
 import java.io.InputStreamReader
 
 class WeatherViewModel: ViewModel() {
-    private val _weather = MutableStateFlow<WeatherResponse?>(null);
-    var weather = _weather.asStateFlow();
+    private val _weather = MutableLiveData<WeatherResponse?>(null);
+    var weather: LiveData<WeatherResponse?> = _weather;
 
     private val _error = MutableStateFlow<String?>(null);
     var error = _error.asStateFlow();
@@ -39,8 +42,6 @@ class WeatherViewModel: ViewModel() {
         viewModelScope.launch {
             try {
                 val weather = WeatherClient.getWeather(city, key, lat, lot);
-
-                println("weather"+weather)
                 _weather.value = weather
             } catch (e: Exception) {
                 _error.value = "Failed to fetch weather: ${e.message}"

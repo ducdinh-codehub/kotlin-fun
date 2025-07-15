@@ -32,7 +32,7 @@ import com.example.myapplication.ui.screens.Settings.Settings
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
-        installSplashScreen()
+
         super.onCreate(savedInstanceState)
         setContent {
             MyApplicationTheme {

@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.offset
@@ -20,10 +21,12 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.DateRange
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -58,10 +61,13 @@ import com.example.myapplication.ui.shared.context.auth.FirebaseAuthState
 import com.example.myapplication.ui.shared.utilizeFunctions.getScreenHeight
 import com.example.myapplication.ui.shared.utilizeFunctions.getScreenWidth
 import com.example.myapplication.ui.shared.utilizeFunctions.getStatusBarHeight
+import com.example.myapplication.ui.theme.Blue300
 import com.example.myapplication.ui.theme.Green300
+import com.example.myapplication.ui.theme.Red300
 import com.example.myapplication.ui.theme.black
 import com.example.myapplication.ui.theme.monk01
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun Login(navHostController: NavHostController, authModelView: AuthModelView) {
 
@@ -113,13 +119,12 @@ fun Login(navHostController: NavHostController, authModelView: AuthModelView) {
     }
 
 
-    Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
+    Scaffold(topBar = {
+    },modifier = Modifier.fillMaxSize()) { innerPadding ->
             Column(
-                modifier = Modifier
-                    .width(getScreenWidth())
-                    .height(getScreenHeight().plus(100.dp)).background(monk01),
+                modifier = Modifier.fillMaxSize().background(monk01),
                 ) {
-                Column(verticalArrangement = Arrangement.spacedBy(35.dp), horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.background(Green300).width(getScreenWidth()).height(525.dp).padding(vertical = getStatusBarHeight().plus(35.dp))){
+                Column(verticalArrangement = Arrangement.spacedBy(35.dp), horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.background(Green300).width(getScreenWidth()).height(450.dp).padding(vertical = getStatusBarHeight().plus(35.dp))){
                     Text("Welcome, searching for solution", fontSize = 23.sp, fontWeight = FontWeight.Bold)
                     TextInput(modifier = Modifier
                         .width(350.dp)
@@ -172,15 +177,17 @@ fun Login(navHostController: NavHostController, authModelView: AuthModelView) {
                 //DatePickerModal({}, onDismiss = {changeStateOpenCalendar()}, openCalendarState)
 
                 Column(
-                    modifier = Modifier.width(getScreenWidth()).height(250.dp).offset(y = -90.dp)
+                    modifier = Modifier.width(getScreenWidth()).height(315.dp).offset(y = -90.dp)
                 ){
-                    LottieAnimation(composition=composition, progress= progress, modifier = Modifier.size(320.dp).align(Alignment.CenterHorizontally))
+                    LottieAnimation(composition=composition, progress= progress, modifier = Modifier.size(360.dp).align(Alignment.CenterHorizontally))
+
                 }
 
-                Column(modifier = Modifier.width(getScreenWidth()).height(250.dp)) {
+                Column(modifier = Modifier.fillMaxWidth(), verticalArrangement = Arrangement.SpaceAround) {
                     Text("\uD83C\uDF3F\u200B Smart Agriculture Solutions \uD83C\uDF3F\u200B Diagnose Leaf Disease \uD83C\uDF3F\u200B Diagnose Plan Disease \uD83C\uDF3F\u200B Smart Agriculture Bot", modifier = Modifier.basicMarquee(
                     ), fontSize = 19.sp, fontWeight = FontWeight.Bold)
                 }
+
 
 
             }
