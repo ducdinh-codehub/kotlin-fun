@@ -77,4 +77,8 @@ dependencies {
     implementation("com.airbnb.android:lottie-compose:6.0.0")
     implementation("androidx.navigation:navigation-compose:2.9.1")
 
+    implementation("com.google.accompanist:accompanist-pager:0.22.0-rc")
+    implementation("io.coil-kt:coil-compose:2.4.0") // Or the latest version
+
+
 }

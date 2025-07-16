@@ -102,6 +102,7 @@ class AuthModelView : ViewModel() {
     }
 
     fun signOut(){
+        this._firebaseAuthState.value = FirebaseAuthState.Unauthenticated;
         this.setAppAuthState(false);
         auth.signOut();
     }

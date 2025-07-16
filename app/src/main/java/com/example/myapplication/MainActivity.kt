@@ -37,7 +37,8 @@ class MainActivity : ComponentActivity() {
         setContent {
             MyApplicationTheme {
                 var authModelViewContext : AuthModelView = viewModel();
-                Navigation(authModelViewContext);
+                val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
+                Navigation(authModelViewContext, drawerState);
             }
         }
     }

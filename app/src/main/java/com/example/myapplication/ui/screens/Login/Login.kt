@@ -4,6 +4,7 @@ import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.basicMarquee
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.WindowInsets
@@ -16,11 +17,14 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.DateRange
+import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.DrawerState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -62,20 +66,22 @@ import com.example.myapplication.ui.shared.utilizeFunctions.getScreenHeight
 import com.example.myapplication.ui.shared.utilizeFunctions.getScreenWidth
 import com.example.myapplication.ui.shared.utilizeFunctions.getStatusBarHeight
 import com.example.myapplication.ui.theme.Blue300
+import com.example.myapplication.ui.theme.Blue600
 import com.example.myapplication.ui.theme.Green300
 import com.example.myapplication.ui.theme.Red300
+import com.example.myapplication.ui.theme.Red400
 import com.example.myapplication.ui.theme.black
 import com.example.myapplication.ui.theme.monk01
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun Login(navHostController: NavHostController, authModelView: AuthModelView) {
+fun Login(navHostController: NavHostController, authModelView: AuthModelView, drawerState: DrawerState) {
 
     val firebaseAuthState = authModelView.firebaseAuthState.observeAsState();
     val context = LocalContext.current;
 
     LaunchedEffect(firebaseAuthState.value) {
-
+        drawerState.close();
         println("Firebase recomposition" + firebaseAuthState.value);
         when(firebaseAuthState.value){
             is FirebaseAuthState.Authenticated -> authModelView.setAppAuthState(true);
@@ -120,19 +126,28 @@ fun Login(navHostController: NavHostController, authModelView: AuthModelView) {
 
 
     Scaffold(topBar = {
-    },modifier = Modifier.fillMaxSize()) { innerPadding ->
+    },modifier = Modifier.fillMaxSize(),
+        bottomBar = {
+            BottomAppBar(
+                windowInsets = WindowInsets(0, 0, 0, 0), // Disables all insets for BottomAppBar
+                containerColor = monk01
+            ) {
+                Text("\uD83C\uDF3F\u200B Smart Agriculture Solutions \uD83C\uDF3F\u200B Diagnose Leaf Disease \uD83C\uDF3F\u200B Diagnose Plan Disease \uD83C\uDF3F\u200B Smart Agriculture Bot", modifier = Modifier.basicMarquee(
+                ).wrapContentHeight(Alignment.Bottom), fontSize = 15.sp, fontWeight = FontWeight.Bold)
+            }
+        }) { innerPadding ->
             Column(
                 modifier = Modifier.fillMaxSize().background(monk01),
                 ) {
                 Column(verticalArrangement = Arrangement.spacedBy(35.dp), horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.background(Green300).width(getScreenWidth()).height(450.dp).padding(vertical = getStatusBarHeight().plus(35.dp))){
-                    Text("Welcome, searching for solution", fontSize = 23.sp, fontWeight = FontWeight.Bold)
+                    Text("Welcome, searching for solution", fontSize = 20.sp, fontWeight = FontWeight.Bold)
                     TextInput(modifier = Modifier
-                        .width(350.dp)
+                        .width(280.dp)
                         .clip(
                             RoundedCornerShape(25.dp)
                         ), label = "Username", placeholder = "Enter Username", onTyping = {e -> setUsername(e)}, notAllowEmpty = true, isFailToLogin = isLoginSuccess)
                     TextInput(modifier = Modifier
-                        .width(350.dp)
+                        .width(280.dp)
                         .clip(
                             RoundedCornerShape(25.dp)
                         ), label = "Password", placeholder = "Enter Password", onTyping = {e -> setPassword(e)}, isPasswordField = true, notAllowEmpty = true, isFailToLogin = isLoginSuccess)
@@ -176,21 +191,24 @@ fun Login(navHostController: NavHostController, authModelView: AuthModelView) {
 
                 //DatePickerModal({}, onDismiss = {changeStateOpenCalendar()}, openCalendarState)
 
+
                 Column(
-                    modifier = Modifier.width(getScreenWidth()).height(315.dp).offset(y = -90.dp)
+                    modifier = Modifier.fillMaxWidth().offset(y=-90.dp)
                 ){
-                    LottieAnimation(composition=composition, progress= progress, modifier = Modifier.size(360.dp).align(Alignment.CenterHorizontally))
+                    LottieAnimation(composition=composition, progress= progress, modifier = Modifier.size(300.dp).align(Alignment.CenterHorizontally))
 
                 }
 
-                Column(modifier = Modifier.fillMaxWidth(), verticalArrangement = Arrangement.SpaceAround) {
-                    Text("\uD83C\uDF3F\u200B Smart Agriculture Solutions \uD83C\uDF3F\u200B Diagnose Leaf Disease \uD83C\uDF3F\u200B Diagnose Plan Disease \uD83C\uDF3F\u200B Smart Agriculture Bot", modifier = Modifier.basicMarquee(
-                    ), fontSize = 19.sp, fontWeight = FontWeight.Bold)
+
+
+
+
+
+
+
                 }
 
 
-
-            }
 
 
     }

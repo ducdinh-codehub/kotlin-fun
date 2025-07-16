@@ -18,6 +18,7 @@ import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.rounded.DateRange
 import androidx.compose.material3.Button
+import androidx.compose.material3.DrawerState
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.Icon
 import androidx.compose.material3.ModalDrawerSheet
@@ -66,14 +67,15 @@ enum class AppScreen(val icon : ImageVector) {
 }
 
 @Composable
-fun Navigation(authModelView: AuthModelView){
+fun Navigation(authModelView: AuthModelView, drawerState: DrawerState){
     val navController = rememberNavController();
     val startDestination = AppScreen.Home
     var selectedDestination by rememberSaveable { mutableIntStateOf(startDestination.ordinal) }
     val userAcc = authModelView.getUserAccount();
     println("Success loading")
     val isAuth : Boolean by authModelView.authState.observeAsState(false);
-    val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
+
+
 
     if(isAuth){
         Scaffold (
@@ -119,7 +121,7 @@ fun Navigation(authModelView: AuthModelView){
                                         Text(inAppScreen.name)
                                     },
                                     icon = {
-                                        Icon(Icons.Rounded.DateRange, contentDescription = "Localized description", modifier = Modifier.size(30.dp))
+                                        Icon(inAppScreen.icon, contentDescription = "Localized description", modifier = Modifier.size(30.dp))
                                     },
                                 )
                             }
@@ -151,7 +153,7 @@ fun Navigation(authModelView: AuthModelView){
         ) { innerPadding ->
             NavHost(navController, AppScreen.Login.name) {
                 composable(route = AppScreen.Login.name) {
-                    Login(navController, authModelView)
+                    Login(navController, authModelView, drawerState)
                 }
                 composable(route=AppScreen.Signup.name){
                     Signup(navController, authModelView)
