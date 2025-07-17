@@ -1,3 +1,5 @@
+val camerax_version = "1.5.0-alpha06" // or the latest version
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -78,7 +80,17 @@ dependencies {
     implementation("androidx.navigation:navigation-compose:2.9.1")
 
     implementation("com.google.accompanist:accompanist-pager:0.22.0-rc")
-    implementation("io.coil-kt:coil-compose:2.4.0") // Or the latest version
+    implementation("io.coil-kt:coil-compose:2.4.0") //
+
+    implementation(libs.vico.compose.m3)// Or the latest version
+
+
+    implementation("androidx.camera:camera-core:${camerax_version}")
+    implementation("androidx.camera:camera-camera2:${camerax_version}")
+    implementation("androidx.camera:camera-lifecycle:${camerax_version}")
+    implementation("androidx.camera:camera-view:${camerax_version}") // CameraXViewfinder
+    implementation("androidx.camera:camera-compose:${camerax_version}")
+    implementation("com.google.accompanist:accompanist-permissions:0.37.2") // For permission handling
 
 
 }

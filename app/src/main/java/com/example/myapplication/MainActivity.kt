@@ -28,6 +28,10 @@ import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.example.myapplication.ui.Navigation
 import com.example.myapplication.ui.screens.News.News
 import com.example.myapplication.ui.screens.Settings.Settings
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.google.accompanist.permissions.PermissionState
+import com.google.accompanist.permissions.isGranted
+import com.google.accompanist.permissions.rememberPermissionState
 
 
 class MainActivity : ComponentActivity() {

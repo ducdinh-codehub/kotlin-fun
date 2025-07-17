@@ -113,6 +113,16 @@ import com.example.myapplication.ui.theme.Purple300
 import com.google.accompanist.pager.ExperimentalPagerApi
 import org.intellij.lang.annotations.JdkConstants.HorizontalAlignment
 import coil.request.ImageRequest
+import com.example.myapplication.ui.theme.Red300
+import com.patrykandpatrick.vico.compose.cartesian.CartesianChartHost
+import com.patrykandpatrick.vico.compose.cartesian.axis.rememberBottom
+import com.patrykandpatrick.vico.compose.cartesian.axis.rememberStart
+import com.patrykandpatrick.vico.compose.cartesian.layer.rememberColumnCartesianLayer
+import com.patrykandpatrick.vico.compose.cartesian.rememberCartesianChart
+import com.patrykandpatrick.vico.core.cartesian.axis.HorizontalAxis
+import com.patrykandpatrick.vico.core.cartesian.axis.VerticalAxis
+import com.patrykandpatrick.vico.core.cartesian.data.CartesianChartModelProducer
+import com.patrykandpatrick.vico.core.cartesian.data.columnSeries
 
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalPagerApi::class)
@@ -134,8 +144,8 @@ fun Home(navHostController: NavHostController, authModelView: AuthModelView, top
     val items = remember {
         listOf(
             CarouselItem(0, R.drawable.demo_news_1, "Thủ tướng: Cần tạo nền tảng vững chắc cho tăng trưởng bền vững từ năm 2025","Hướng tới mục tiêu phát triển đột phá trong giai đoạn mới, Chính phủ đặt quyết tâm đạt mức tăng trưởng GDP 8,3–8,5% ngay trong năm 2025."),
-            CarouselItem(1, R.drawable.demo_news_1, "donut",""),
-            CarouselItem(2, R.drawable.demo_news_1, "eclair",""),
+            CarouselItem(1, R.drawable.demo_news_2, "Nhiều tàu cá được gắn 2 thiết bị giám sát hành trình",""),
+            CarouselItem(2, R.drawable.demo_news_3, "Đà Nẵng dừng tổ chức lễ hội quốc tế sâm Ngọc Linh và dược liệu 2025",""),
         )
     }
 
@@ -145,6 +155,7 @@ fun Home(navHostController: NavHostController, authModelView: AuthModelView, top
         "https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885__340.jpg",
     )
     Scaffold(
+
         topBar = {
             TopAppBar(title = { Text(
                 topBarName
@@ -173,18 +184,21 @@ fun Home(navHostController: NavHostController, authModelView: AuthModelView, top
                 Modifier
                     .fillMaxWidth()
                     .padding(vertical = 20.dp, horizontal = 8.dp), verticalArrangement = Arrangement.spacedBy(20.dp)) {
-                Row(horizontalArrangement = Arrangement.spacedBy(210.dp)){
+                Row(horizontalArrangement = Arrangement.SpaceBetween, modifier = Modifier.fillMaxWidth()){
                     Text("App fatures", fontSize = 18.sp, fontWeight = FontWeight.Bold)
                     Text("See All")
                 }
 
 
-                Column(Modifier.fillMaxWidth().height(170.dp).background(Color.White, shape = RoundedCornerShape(15.dp)), horizontalAlignment=Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center) {
+                Column(Modifier.fillMaxWidth().height(150.dp).background(Color.White, shape = RoundedCornerShape(15.dp)), horizontalAlignment=Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center) {
                     Row(Modifier.fillMaxWidth().horizontalScroll(rememberScrollState()).padding(2.dp), horizontalArrangement= Arrangement.spacedBy(25.dp, Alignment.CenterHorizontally), verticalAlignment = Alignment.CenterVertically) {
                         IconButton(
-                            onClick = {},
+                            onClick = {
+                                println("HELLOLLLLLLLL")
+                                navHostController.navigate(AppScreen.Camera.name)
+                            },
                             modifier = Modifier
-                                .size(110.dp)
+                                .size(92.dp)
                                 .background(
                                     color = Green50,
                                     shape = CircleShape
@@ -202,14 +216,16 @@ fun Home(navHostController: NavHostController, authModelView: AuthModelView, top
                                     modifier = Modifier.size(40.dp), // Icon size is half the button size
                                     tint = Blue300 // Optional: Customize icon color
                                 )
-                                Text("Smart Detect", fontSize = 13.sp, fontWeight = FontWeight.Bold)
+                                Text("Smart Detect", fontSize = 9.sp, fontWeight = FontWeight.Bold)
                             }
                         }
 
                         IconButton(
-                            onClick = {},
+                            onClick = {
+                                navHostController.navigate(AppScreen.Smartbot.name)
+                            },
                             modifier = Modifier
-                                .size(110.dp)
+                                .size(92.dp)
                                 .background(
                                     color = Green50,
                                     shape = CircleShape
@@ -227,14 +243,16 @@ fun Home(navHostController: NavHostController, authModelView: AuthModelView, top
                                     modifier = Modifier.size(40.dp), // Icon size is half the button size
                                     tint = LightGreen300 // Optional: Customize icon color
                                 )
-                                Text("Smart Bot", fontSize = 13.sp, fontWeight = FontWeight.Bold)
+                                Text("Smart Bot", fontSize = 9.sp, fontWeight = FontWeight.Bold)
                             }
                         }
 
                         IconButton(
-                            onClick = {},
+                            onClick = {
+
+                            },
                             modifier = Modifier
-                                .size(110.dp)
+                                .size(92.dp)
                                 .background(
                                     color = Green50,
                                     shape = CircleShape
@@ -252,7 +270,7 @@ fun Home(navHostController: NavHostController, authModelView: AuthModelView, top
                                     modifier = Modifier.size(40.dp), // Icon size is half the button size
                                     tint = Purple300 // Optional: Customize icon color
                                 )
-                                Text("Smart Predict", fontSize = 13.sp, fontWeight = FontWeight.Bold)
+                                Text("Smart Predict", fontSize = 10.sp, fontWeight = FontWeight.Bold)
                             }
                         }
                     }
@@ -263,14 +281,14 @@ fun Home(navHostController: NavHostController, authModelView: AuthModelView, top
             Column (
                 Modifier
                     .fillMaxWidth()
-                    .padding(vertical = 20.dp, horizontal = 8.dp).height(500.dp), verticalArrangement = Arrangement.spacedBy(20.dp)) {
+                    .padding(horizontal = 8.dp), verticalArrangement = Arrangement.spacedBy(20.dp)) {
 
-                Row(horizontalArrangement = Arrangement.spacedBy(170 .dp)){
+                Row(horizontalArrangement = Arrangement.SpaceBetween, modifier = Modifier.fillMaxWidth()){
                     Text("Agriculture news", fontSize = 18.sp, fontWeight = FontWeight.Bold)
                     Text("See All")
                 }
 
-                Column(Modifier.background(Color.White)) {
+                Column(Modifier.background(Color.White, shape = RoundedCornerShape(15.dp))) {
                     Card(
                         modifier = Modifier.padding(16.dp),
                         shape = RoundedCornerShape(16.dp),
@@ -282,7 +300,7 @@ fun Home(navHostController: NavHostController, authModelView: AuthModelView, top
                                 Box {
                                     Image(
                                         modifier = Modifier
-                                            .height(350.dp).clickable { println(items[index].heading+"contentDescription") },
+                                            .height(300.dp).clickable { println(items[index].heading+"contentDescription") },
                                         painter = painterResource(id = items[index].imageResId),
                                         contentDescription = items[index].heading,
                                         contentScale = ContentScale.Crop
@@ -299,7 +317,7 @@ fun Home(navHostController: NavHostController, authModelView: AuthModelView, top
                                         Box(
                                             Modifier.padding(15.dp)
                                         ){
-                                            Text("${items[index].heading}", color = Color.White, fontSize = 20.sp, fontWeight = FontWeight.Bold, fontFamily = FontFamily.SansSerif)
+                                            Text("${items[index].heading}", color = Color.White, fontSize = 16.sp, fontWeight = FontWeight.Bold, fontFamily = FontFamily.SansSerif)
                                         }
                                     }
                                 }
@@ -311,36 +329,39 @@ fun Home(navHostController: NavHostController, authModelView: AuthModelView, top
                     }
                 }
 
-
-
-                /*
-                Column(Modifier.fillMaxWidth().background(Color.White, shape = RoundedCornerShape(15.dp)).padding(10.dp).height(600.dp)) {
-                    Column(
-                        modifier = Modifier.fillMaxWidth()
-                    ){
-                        Image( painterResource(R.drawable.demo_news_1), contentDescription = "", Modifier.clip(RoundedCornerShape(16.dp)).fillMaxWidth(), contentScale = ContentScale.FillWidth)
-
-                    }
-
-
-                    Column(
-                        modifier = Modifier.fillMaxWidth().offset(y = -89.dp).background(Color.Black.copy(alpha = 0.5f), shape = RoundedCornerShape(15.dp)).padding(9.dp)
-
-                    ){
-                        Text("Hộ dân chuyển đất nông nghiệp sang đất ở có thể được tính tiền sử dụng đất theo cách cũ", color = Color.White)
-                    }
-
-                    Row(Modifier.padding(5.dp), verticalAlignment = Alignment.CenterVertically) {
-                        Icon(painterResource(R.drawable.article_person_24dp), contentDescription = "Localized description", Modifier.background(
-                            Grey50))
-                        Row(horizontalArrangement = Arrangement.SpaceBetween){
-                            Text("https://vnexpress.net/ho-dan-chuyen-dat-nong-nghiep-sang-dat-o-co-the-duoc-tinh-tien-su-dung-dat-theo-cach-cu-4913213.html", Modifier.basicMarquee())
-                        }
-
-                    }
-                }
-                */
             }
+
+            Column (
+                Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 8.dp, vertical = 10.dp).height(325.dp), verticalArrangement = Arrangement.spacedBy(20.dp)) {
+                Row(horizontalArrangement = Arrangement.SpaceBetween, modifier = Modifier.fillMaxWidth()){
+                    Text("Agricultural tion diagrams", fontSize = 18.sp, fontWeight = FontWeight.Bold)
+                    Text("See All")
+                }
+                Column(Modifier.background(Color.White, shape = RoundedCornerShape(15.dp)).fillMaxSize().padding(15.dp), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center) {
+                    val modelProducer = remember { CartesianChartModelProducer() }
+                    LaunchedEffect(Unit) {
+                        modelProducer.runTransaction {
+                            columnSeries { series(5, 6, 5, 5, 6 ,7, 8, 9) }
+                        }
+                    }
+                    CartesianChartHost(
+                        rememberCartesianChart(
+                            rememberColumnCartesianLayer(),
+                            startAxis = VerticalAxis.rememberStart(),
+                            bottomAxis = HorizontalAxis.rememberBottom(),
+                        ),
+                        modelProducer,
+                    )
+                }
+            }
+
+            Box(Modifier.height(100.dp)) {
+
+            }
+
+
         }
     }
 }

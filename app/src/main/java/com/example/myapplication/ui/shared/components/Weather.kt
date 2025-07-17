@@ -125,25 +125,25 @@ fun Weather(){
                     }
                 }
 
-                Row(horizontalArrangement = Arrangement.spacedBy(10.dp)){
-                    Box(Modifier.background(color = Grey100, shape = RoundedCornerShape(15.dp)).padding(2.dp).width(110.dp),) {
-                        Row(Modifier.padding(5.dp), verticalAlignment = Alignment.CenterVertically) {
+                Row(horizontalArrangement = Arrangement.spacedBy(10.dp),){
+                    Box(Modifier.background(color = Grey100, shape = RoundedCornerShape(15.dp)).padding(2.dp),) {
+                        Row(Modifier.padding(5.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.SpaceBetween) {
                             Icon(painterResource(R.drawable.air_24dp), contentDescription = "Localized description", Modifier.background(
                                 Grey50))
                             Text(" 2,4 Km/h")
                         }
                     }
 
-                    Box(Modifier.background(color = Grey100, shape = RoundedCornerShape(15.dp)).padding(2.dp).width(100.dp),) {
-                        Row(Modifier.padding(5.dp), verticalAlignment = Alignment.CenterVertically) {
+                    Box(Modifier.background(color = Grey100, shape = RoundedCornerShape(15.dp)).padding(2.dp)) {
+                        Row(Modifier.padding(5.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.SpaceBetween) {
                             Icon(painterResource(R.drawable.water_voc_24dp), contentDescription = "Localized description", Modifier.background(
                                 Grey50))
                             Text(" 72,5 %")
                         }
                     }
 
-                    Box(Modifier.background(color = Grey100, shape = RoundedCornerShape(15.dp)).padding(2.dp).width(100.dp),) {
-                        Row(Modifier.padding(5.dp), verticalAlignment = Alignment.CenterVertically) {
+                    Box(Modifier.background(color = Grey100, shape = RoundedCornerShape(15.dp)).padding(2.dp)) {
+                        Row(Modifier.padding(5.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.SpaceBetween) {
                             Icon(painterResource(R.drawable.sunny_24dp), contentDescription = "Localized description", Modifier.background(
                                 Grey50))
                             Text("Clouds")
@@ -153,7 +153,7 @@ fun Weather(){
             }
         }
         Row(Modifier.fillMaxWidth().height(130.dp), horizontalArrangement = Arrangement.SpaceBetween) {
-            Column(Modifier.width(220.dp).fillMaxHeight().background(Color.White, shape = RoundedCornerShape(15.dp)).padding(10.dp)) {
+            Column(Modifier.width(200.dp).fillMaxHeight().background(Color.White, shape = RoundedCornerShape(15.dp)).padding(25.dp)) {
                 Box(Modifier.background(color = Grey100, shape = RoundedCornerShape(15.dp)).padding(2.dp)) {
                     Row(Modifier.padding(5.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.SpaceBetween) {
                         Icon(painterResource(R.drawable.rainy_24dp), contentDescription = "Localized description", Modifier.background(
@@ -161,9 +161,9 @@ fun Weather(){
                         Text("Preciptation")
                     }
                 }
-                Text("5,1 ml", fontSize = 40.sp, fontWeight = FontWeight.Bold)
+                Text("5,1 ml", fontSize = 25.sp, fontWeight = FontWeight.Bold)
             }
-            Column(Modifier.width(150.dp).fillMaxHeight().background(Color.White, shape = RoundedCornerShape(15.dp)).padding(10.dp)) {
+            Column(Modifier.fillMaxHeight().background(Color.White, shape = RoundedCornerShape(15.dp)).padding(25.dp)) {
                 Box(Modifier.background(color = Grey100, shape = RoundedCornerShape(15.dp)).padding(2.dp),) {
                     Row(Modifier.padding(5.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.SpaceBetween) {
                         Icon(painterResource(R.drawable.wind_power_24dp), contentDescription = "Localized description", Modifier.background(
@@ -171,7 +171,7 @@ fun Weather(){
                         Text("Wind")
                     }
                 }
-                Text("23 m/s", fontSize = 40.sp, fontWeight = FontWeight.Bold)
+                Text("23 m/s", fontSize = 25.sp, fontWeight = FontWeight.Bold)
             }
         }
 

@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
@@ -66,6 +67,7 @@ import com.example.myapplication.ui.theme.Teal400
 import com.example.myapplication.ui.theme.black
 import com.example.myapplication.ui.theme.monk01
 import com.example.myapplication.ui.theme.white
+import org.intellij.lang.annotations.JdkConstants.HorizontalAlignment
 
 @Composable
 fun Signup(navHostController: NavHostController, authModelView: AuthModelView){
@@ -108,42 +110,37 @@ fun Signup(navHostController: NavHostController, authModelView: AuthModelView){
         password = inputText
     }
     Scaffold { innerPadding ->
-        Column(modifier = Modifier
-            .width(getScreenWidth())
-            .height(getScreenHeight().plus(100.dp)).background(monk01),) {
+        Column(modifier = Modifier.fillMaxSize().background(monk01), horizontalAlignment=Alignment.CenterHorizontally) {
 
-            Column(modifier = Modifier.offset(y=30.dp).width(getScreenWidth()).height(290.dp)) {
+            Column(modifier = Modifier.fillMaxWidth().height(200.dp).padding(15.dp)) {
                 LottieAnimation(composition=composition, progress= progress, modifier = Modifier.size(250.dp).align(Alignment.CenterHorizontally))
             }
 
 
-            Column(modifier = Modifier.width(getScreenWidth() - 20.dp).height(390.dp).align(Alignment.CenterHorizontally))
+            Column(modifier = Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally)
             {
-                Box(
-                    modifier = Modifier.fillMaxSize()
-                        .background(Teal200, shape = RoundedCornerShape(26.dp))
-                        .padding(16.dp).align(Alignment.CenterHorizontally)
-                ) {
-                    Column() {
+
+                    Column(Modifier.background(Teal200, shape = RoundedCornerShape(26.dp)).padding(35.dp), verticalArrangement = Arrangement.spacedBy(12.dp, Alignment.CenterVertically), horizontalAlignment = Alignment.CenterHorizontally, ) {
                         Text("Let Plant With Us !", fontSize = 25.sp, fontWeight = FontWeight.Bold)
 
-                        Column(Modifier.padding(vertical = 15.dp), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(15.dp)){
+                        Column( horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(12.dp, Alignment.CenterVertically)){
                             TextInput(modifier = Modifier
-                                .width(350.dp)
+                                .width(250.dp)
                                 .clip(
                                     RoundedCornerShape(25.dp)
                                 ), label = "Username", placeholder = "Enter Username", onTyping = {e -> setUsername(e)}, notAllowEmpty = true)
                             TextInput(modifier = Modifier
-                                .width(350.dp)
+                                .width(250.dp)
                                 .clip(
                                     RoundedCornerShape(25.dp)
                                 ), label = "Password", placeholder = "Enter Password", onTyping = {e -> setPassword(e)}, isPasswordField = true, notAllowEmpty = true)
 
                             Row(
-                                horizontalArrangement = Arrangement.spacedBy(35.dp)
+                                horizontalArrangement = Arrangement.SpaceBetween,
+                                verticalAlignment = Alignment.CenterVertically
                             ){
                                 NumberInput(modifier = Modifier
-                                    .width(258.dp)
+                                    .width(200.dp)
                                     .clip(
                                         RoundedCornerShape(25.dp)
                                     ), label = "Age")
@@ -151,25 +148,29 @@ fun Signup(navHostController: NavHostController, authModelView: AuthModelView){
                                     onClick = { openCalendarState = true },
 
                                     ) {
-                                    Icon(Icons.Rounded.DateRange, contentDescription = "Localized description", modifier = Modifier.size(30.dp))
+                                    Icon(Icons.Rounded.DateRange, contentDescription = "Localized description", modifier = Modifier.size(25.dp))
                                 }
                             }
 
-                            Button(onClick = {
+                            Button(modifier = Modifier.width(250.dp), onClick = {
                                 if(username.isNotEmpty() && password.isNotEmpty()){
                                     authModelView.signUp(username, password);
                                 }
 
-                            }, colors = ButtonDefaults.buttonColors(containerColor = black), modifier = Modifier.width(500.dp)){
-                                Text("Sign up", fontSize = 17.sp)
+                            }, colors = ButtonDefaults.buttonColors(containerColor = black) ){
+                                Text("Sign up")
                             }
 
-                            Text("I already had account, back to login screen.", modifier = Modifier.clickable { navHostController.popBackStack() }, textDecoration = TextDecoration.Underline)
+                            Row(verticalAlignment = Alignment.CenterVertically){
+                                Text("I already had account.", modifier = Modifier.clickable { navHostController.popBackStack() }, textDecoration = TextDecoration.Underline, fontWeight = FontWeight.Bold)
+
+                            }
+
                         }
 
                     }
 
-                }
+
             }
 
             DatePickerModal({}, onDismiss = {changeStateOpenCalendar()}, openCalendarState)
