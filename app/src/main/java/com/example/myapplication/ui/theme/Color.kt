@@ -338,3 +338,12 @@ val monk07 = Color( 0xff825c43)
 val monk08 = Color( 0xff604134)
 val monk09 = Color( 0xff3a312a)
 val monk10 = Color( 0xff292420)
+
+
+/* Offwhite */
+val offWhite10 = Color(0xfff2f0ef)
+val offWhite100 = Color(0xfff1f0f0)
+val offWhite200 = Color(0xfff1f0f0)
+val offWhite300 = Color(0xffe2e1e0)
+val offWhite400 = Color(0xfff2f0f0)
+val offWhite500 = Color(0xfff1f0f0)

@@ -6,6 +6,8 @@ import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.animateIntOffsetAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.offset
@@ -56,15 +58,16 @@ fun Chatbot(navHostController: NavHostController, authModelView: AuthModelView, 
     LaunchedEffect(navHostController.currentBackStackEntryAsState().value) {
         println("LOADED")
         menuIconMoveState = true
+
     }
 
     val offset by animateIntOffsetAsState(
         targetValue = if (menuIconMoveState) {
+            val a = 1
             IntOffset(pxToMove, 0)
         } else {
             IntOffset.Zero
         },
-
         label = "offset",
         animationSpec = tween(
             durationMillis = 300,
@@ -77,7 +80,25 @@ fun Chatbot(navHostController: NavHostController, authModelView: AuthModelView, 
         topBar = {
 
             TopAppBar(modifier = Modifier.offset{offset}, title = {
-                         Text("")
+
+                    AnimatedContent(
+                        titleScreenFadeIn,
+                        transitionSpec = {
+                            fadeIn(
+                                animationSpec = tween(3000)
+                            ) togetherWith fadeOut(animationSpec = tween(3000))
+                        },
+                        modifier = Modifier.clickable(
+                            interactionSource = remember { MutableInteractionSource() },
+                            indication = null
+                        ) {
+                        },
+                        label = "Animated Content"
+                    ){ it ->
+
+                        Text("Hello")
+                    }
+
                     }, navigationIcon = {
                 Icon(Icons.Default.Menu, contentDescription = "Localized description", modifier = Modifier.size(30.dp).clickable { scope.launch { drawerState.apply { if(isClosed) open() else close() } } })
             })

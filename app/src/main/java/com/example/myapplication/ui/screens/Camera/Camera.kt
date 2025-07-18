@@ -74,7 +74,7 @@ fun Camera(navHostController: NavHostController, authModelView: AuthModelView, t
         }
 
     ) { innerPadding ->
-        Column(Modifier.padding(innerPadding).fillMaxSize().background(Red400)) {
+        Column(Modifier.padding(innerPadding).fillMaxSize()) {
             when (cameraPermissionState.status) {
                 is PermissionStatus.Granted -> {
                     showDialog = false;

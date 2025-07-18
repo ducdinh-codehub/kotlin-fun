@@ -57,6 +57,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.myapplication.R
 import com.example.myapplication.ui.screens.Camera.Camera
+import com.example.myapplication.ui.screens.Camera.CameraMainFeature
 import com.example.myapplication.ui.screens.Chatbot.Chatbot
 import com.example.myapplication.ui.screens.Home.Home
 import com.example.myapplication.ui.screens.Login.Login
@@ -68,6 +69,7 @@ import com.example.myapplication.ui.shared.context.auth.AuthModelView
 import com.example.myapplication.ui.theme.Blue600
 import com.example.myapplication.ui.theme.Grey100
 import com.example.myapplication.ui.theme.Grey50
+import kotlinx.coroutines.launch
 
 enum class AppScreen(val icon : ImageVector) {
     Login(Icons.Filled.AccountCircle),
@@ -77,7 +79,8 @@ enum class AppScreen(val icon : ImageVector) {
     Settings(Icons.Filled.Settings),
     Splash(Icons.Filled.Notifications),
     Camera(Icons.Filled.Favorite),
-    Smartbot(Icons.Filled.Face)
+    Smartbot(Icons.Filled.Face),
+    CameraMainFeature(Icons.Filled.Favorite)
 }
 
 @Composable
@@ -98,18 +101,20 @@ fun Navigation(authModelView: AuthModelView, drawerState: DrawerState){
     val a = currentRoute(navController);
     val currentRoute = navController.currentBackStackEntry?.destination?.route
 
+    val scope = rememberCoroutineScope();
+
 
     println("currentRoute(navController)"+a);
-    println("currentRoute"+currentRoute)
+    println("currentRoute "+currentRoute)
 
     if(isAuth){
         Scaffold (
             modifier = Modifier.fillMaxSize(),
             bottomBar = {
-                if(currentRoute !== "Camera" && currentRoute !== "Smartbot"){
+                if(currentRoute !== "Camera" && currentRoute !== "Smartbot" && currentRoute !== "CameraMainFeature"){
                     NavigationBar(windowInsets = WindowInsets(0, 0, 0, 0), containerColor =  Grey50) {
                         AppScreen.entries.forEachIndexed { index, inAppScreen ->
-                            if(inAppScreen.name !== "Login" && inAppScreen.name !== "Signup" && inAppScreen.name !== "Splash" && inAppScreen.name !== "Camera"){
+                            if(inAppScreen.name !== "Login" && inAppScreen.name !== "Signup" && inAppScreen.name !== "Splash" && inAppScreen.name !== "Camera" && inAppScreen.name !== "CameraMainFeature"){
                                 NavigationBarItem(
                                     selected = selectedDestination == index,
                                     onClick = {
@@ -144,6 +149,9 @@ fun Navigation(authModelView: AuthModelView, drawerState: DrawerState){
                                     onClick = {
                                         navController.navigate(route = inAppScreen.name)
                                         selectedDestination = index
+                                        scope.launch {
+                                            drawerState.close();
+                                        }
                                     },
                                     label={
                                         Text(inAppScreen.name)
@@ -176,6 +184,9 @@ fun Navigation(authModelView: AuthModelView, drawerState: DrawerState){
                     }
                     composable(route = AppScreen.Smartbot.name){
                         Chatbot(navController, authModelView, AppScreen.Smartbot.name, drawerState)
+                    }
+                    composable(route = AppScreen.CameraMainFeature.name){
+                        CameraMainFeature(navController, authModelView, AppScreen.CameraMainFeature.name, drawerState)
                     }
                 }
             }

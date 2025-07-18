@@ -113,6 +113,10 @@ import com.example.myapplication.ui.theme.Purple300
 import com.google.accompanist.pager.ExperimentalPagerApi
 import org.intellij.lang.annotations.JdkConstants.HorizontalAlignment
 import coil.request.ImageRequest
+import com.airbnb.lottie.compose.LottieCompositionSpec
+import com.airbnb.lottie.compose.LottieConstants
+import com.airbnb.lottie.compose.animateLottieCompositionAsState
+import com.airbnb.lottie.compose.rememberLottieComposition
 import com.example.myapplication.ui.theme.Red300
 import com.patrykandpatrick.vico.compose.cartesian.CartesianChartHost
 import com.patrykandpatrick.vico.compose.cartesian.axis.rememberBottom
@@ -132,6 +136,8 @@ fun Home(navHostController: NavHostController, authModelView: AuthModelView, top
     var selectedDestination by rememberSaveable { mutableIntStateOf(startDestination.ordinal) }
 
     val scope = rememberCoroutineScope()
+
+
 
     data class CarouselItem(
         val id: Int,
@@ -194,8 +200,7 @@ fun Home(navHostController: NavHostController, authModelView: AuthModelView, top
                     Row(Modifier.fillMaxWidth().horizontalScroll(rememberScrollState()).padding(2.dp), horizontalArrangement= Arrangement.spacedBy(25.dp, Alignment.CenterHorizontally), verticalAlignment = Alignment.CenterVertically) {
                         IconButton(
                             onClick = {
-                                println("HELLOLLLLLLLL")
-                                navHostController.navigate(AppScreen.Camera.name)
+                                navHostController.navigate(AppScreen.CameraMainFeature.name)
                             },
                             modifier = Modifier
                                 .size(92.dp)
@@ -336,7 +341,7 @@ fun Home(navHostController: NavHostController, authModelView: AuthModelView, top
                     .fillMaxWidth()
                     .padding(horizontal = 8.dp, vertical = 10.dp).height(325.dp), verticalArrangement = Arrangement.spacedBy(20.dp)) {
                 Row(horizontalArrangement = Arrangement.SpaceBetween, modifier = Modifier.fillMaxWidth()){
-                    Text("Agricultural tion diagrams", fontSize = 18.sp, fontWeight = FontWeight.Bold)
+                    Text("Agricultural production diagrams", fontSize = 18.sp, fontWeight = FontWeight.Bold)
                     Text("See All")
                 }
                 Column(Modifier.background(Color.White, shape = RoundedCornerShape(15.dp)).fillMaxSize().padding(15.dp), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center) {
