@@ -28,9 +28,11 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -59,6 +61,8 @@ import com.example.myapplication.ui.theme.Purple300
 import com.example.myapplication.ui.theme.Purple400
 import com.example.myapplication.ui.theme.Purple500
 import com.example.myapplication.ui.theme.Red200
+import com.example.myapplication.ui.theme.Teal100
+import com.example.myapplication.ui.theme.Teal200
 import com.example.myapplication.ui.theme.monk01
 import com.example.myapplication.ui.theme.monk04
 import com.example.myapplication.ui.theme.offWhite10
@@ -87,6 +91,12 @@ fun CameraMainFeature(navHostController: NavHostController, authModelView: AuthM
         isPlaying = true,
     )
 
+    val colorStops = arrayOf(
+        0.8f to Teal200,
+        0.1f to Blue100,
+        //0.2f to Green100
+    )
+
     Scaffold(
         topBar = {
             TopAppBar(title = { Text(
@@ -98,7 +108,7 @@ fun CameraMainFeature(navHostController: NavHostController, authModelView: AuthM
 
     ){
         innerPadding ->
-        Column(Modifier.padding(innerPadding).fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally) {
+        Column(Modifier.padding(innerPadding).fillMaxSize().background(Brush.linearGradient(colorStops = colorStops)), horizontalAlignment = Alignment.CenterHorizontally) {
             Column(Modifier.fillMaxSize().padding(5.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
 
                 Column(Modifier.fillMaxWidth().padding(horizontal = 10.dp, vertical = 25.dp)) {
@@ -116,7 +126,7 @@ fun CameraMainFeature(navHostController: NavHostController, authModelView: AuthM
 
                 Row(horizontalArrangement = Arrangement.SpaceAround, modifier = Modifier.height(250.dp).fillMaxWidth()) {
                     Column(Modifier.background(color = Blue100, shape = RoundedCornerShape(15.dp)).width(170.dp).fillMaxHeight().padding(15.dp).clickable { navHostController.navigate(AppScreen.Camera.name) }, horizontalAlignment=Alignment.CenterHorizontally) {
-                        Text("Smart plant image searching", fontFamily = FontFamily.SansSerif, fontWeight = FontWeight.Bold)
+                        Text("Plant image searching", fontFamily = FontFamily.SansSerif, fontWeight = FontWeight.Bold)
                         LottieAnimation(composition=composition, progress= progress, modifier = Modifier.size(350.dp).align(Alignment.CenterHorizontally))
                     }
                     Column(Modifier.background(color = Green100, shape = RoundedCornerShape(15.dp)).width(170.dp).fillMaxHeight().padding(15.dp).clickable { navHostController.navigate(AppScreen.Camera.name) }, horizontalAlignment=Alignment.CenterHorizontally) {
@@ -126,7 +136,7 @@ fun CameraMainFeature(navHostController: NavHostController, authModelView: AuthM
                 }
 
                 Column(Modifier.fillMaxWidth().padding(15.dp), verticalArrangement = Arrangement.spacedBy(15.dp)) {
-                    Text("Related question", fontSize = 17.sp, fontFamily = FontFamily.SansSerif, color = Grey300, fontWeight = FontWeight.Bold)
+                    Text("Related question", fontSize = 17.sp, fontFamily = FontFamily.SansSerif, color = Grey300, fontWeight = FontWeight.Bold, fontStyle = FontStyle.Italic)
 
                     Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceAround){
                         Box(Modifier.background(color = Green100, shape = CircleShape).size(45.dp).padding(15.dp).align(Alignment.CenterVertically)){

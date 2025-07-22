@@ -59,6 +59,7 @@ import com.example.myapplication.R
 import com.example.myapplication.ui.screens.Camera.Camera
 import com.example.myapplication.ui.screens.Camera.CameraMainFeature
 import com.example.myapplication.ui.screens.Chatbot.Chatbot
+import com.example.myapplication.ui.screens.Chatbot.ChatbotMainfeature
 import com.example.myapplication.ui.screens.Home.Home
 import com.example.myapplication.ui.screens.Login.Login
 import com.example.myapplication.ui.screens.News.News
@@ -80,6 +81,7 @@ enum class AppScreen(val icon : ImageVector) {
     Splash(Icons.Filled.Notifications),
     Camera(Icons.Filled.Favorite),
     Smartbot(Icons.Filled.Face),
+    SmartbotMainFeature(Icons.Filled.Face),
     CameraMainFeature(Icons.Filled.Favorite)
 }
 
@@ -94,27 +96,22 @@ fun Navigation(authModelView: AuthModelView, drawerState: DrawerState){
     val navController = rememberNavController();
     val startDestination = AppScreen.Home
     var selectedDestination by rememberSaveable { mutableIntStateOf(startDestination.ordinal) }
-    val userAcc = authModelView.getUserAccount();
     println("Success loading")
     val isAuth : Boolean by authModelView.authState.observeAsState(false);
-
-    val a = currentRoute(navController);
     val currentRoute = navController.currentBackStackEntry?.destination?.route
-
     val scope = rememberCoroutineScope();
 
-
-    println("currentRoute(navController)"+a);
-    println("currentRoute "+currentRoute)
+    val bottomBarItemList = listOf(AppScreen.Home.name, AppScreen.News.name, AppScreen.Settings.name, AppScreen.SmartbotMainFeature.name);
+    val sideDrawerItemList = listOf(AppScreen.Home.name, AppScreen.News.name, AppScreen.SmartbotMainFeature.name, AppScreen.Settings.name,AppScreen.Signup.name)
 
     if(isAuth){
         Scaffold (
             modifier = Modifier.fillMaxSize(),
             bottomBar = {
-                if(currentRoute !== "Camera" && currentRoute !== "Smartbot" && currentRoute !== "CameraMainFeature"){
+                if(currentRoute in bottomBarItemList){
                     NavigationBar(windowInsets = WindowInsets(0, 0, 0, 0), containerColor =  Grey50) {
                         AppScreen.entries.forEachIndexed { index, inAppScreen ->
-                            if(inAppScreen.name !== "Login" && inAppScreen.name !== "Signup" && inAppScreen.name !== "Splash" && inAppScreen.name !== "Camera" && inAppScreen.name !== "CameraMainFeature"){
+                            if(inAppScreen.name in bottomBarItemList){
                                 NavigationBarItem(
                                     selected = selectedDestination == index,
                                     onClick = {
@@ -122,7 +119,7 @@ fun Navigation(authModelView: AuthModelView, drawerState: DrawerState){
                                         selectedDestination = index
                                     },
                                     label={
-                                        Text(inAppScreen.name)
+                                        if(inAppScreen.name === AppScreen.SmartbotMainFeature.name ) Text("Smartbot") else Text(inAppScreen.name)
                                     },
                                     icon = {
                                         Icon(inAppScreen.icon, contentDescription = "Localized description", modifier = Modifier.size(30.dp))
@@ -143,7 +140,7 @@ fun Navigation(authModelView: AuthModelView, drawerState: DrawerState){
                 drawerContent = {
                     ModalDrawerSheet {
                         AppScreen.entries.forEachIndexed { index, inAppScreen ->
-                            if(inAppScreen.name !== "Login" && inAppScreen.name !== "Splash" && inAppScreen.name !== "Camera"){
+                            if(inAppScreen.name in sideDrawerItemList){
                                 NavigationDrawerItem(
                                     selected = selectedDestination == index,
                                     onClick = {
@@ -154,7 +151,7 @@ fun Navigation(authModelView: AuthModelView, drawerState: DrawerState){
                                         }
                                     },
                                     label={
-                                        Text(inAppScreen.name)
+                                        if(inAppScreen.name === AppScreen.SmartbotMainFeature.name) Text("Smartbot") else Text(inAppScreen.name)
                                     },
                                     icon = {
                                         Icon(inAppScreen.icon, contentDescription = "Localized description", modifier = Modifier.size(30.dp))
@@ -187,6 +184,10 @@ fun Navigation(authModelView: AuthModelView, drawerState: DrawerState){
                     }
                     composable(route = AppScreen.CameraMainFeature.name){
                         CameraMainFeature(navController, authModelView, AppScreen.CameraMainFeature.name, drawerState)
+                    }
+                    composable(route = AppScreen.SmartbotMainFeature.name) {
+                        ChatbotMainfeature(navController, authModelView, "Smartbot", drawerState)
+
                     }
                 }
             }

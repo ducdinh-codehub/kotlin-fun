@@ -227,7 +227,7 @@ fun Home(navHostController: NavHostController, authModelView: AuthModelView, top
 
                         IconButton(
                             onClick = {
-                                navHostController.navigate(AppScreen.Smartbot.name)
+                                navHostController.navigate(AppScreen.SmartbotMainFeature.name)
                             },
                             modifier = Modifier
                                 .size(92.dp)
