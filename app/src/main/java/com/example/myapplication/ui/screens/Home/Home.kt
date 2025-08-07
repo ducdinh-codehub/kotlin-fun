@@ -13,14 +13,17 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
@@ -131,7 +134,7 @@ import com.patrykandpatrick.vico.core.cartesian.data.columnSeries
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalPagerApi::class)
 @Composable
-fun Home(navHostController: NavHostController, authModelView: AuthModelView, topBarName: String, drawerState: DrawerState) {
+fun Home(navHostController: NavHostController, authModelView: AuthModelView, topBarName: String, drawerState: DrawerState, modifier: Modifier) {
     val startDestination = AppScreen.Home
     var selectedDestination by rememberSaveable { mutableIntStateOf(startDestination.ordinal) }
 
@@ -161,29 +164,32 @@ fun Home(navHostController: NavHostController, authModelView: AuthModelView, top
         "https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885__340.jpg",
     )
     Scaffold(
-
+        /*
         topBar = {
             TopAppBar(title = { Text(
                 topBarName
-            ) }, navigationIcon = {
+            ) }, colors = TopAppBarDefaults.topAppBarColors(
+                containerColor = Color.Transparent // Set the background to transparent
+            ), navigationIcon = {
                 Icon(Icons.Default.Menu, contentDescription = "Localized description", modifier = Modifier
                     .size(30.dp)
                     .clickable { scope.launch { drawerState.apply { if (isClosed) open() else close() } } })
             })
-        }
+        }*/
 
-    ) { innerPadding ->
+    ) {
+        innerPadding ->
+
         Column(
             Modifier
-                .background(Green50)
-                .padding(innerPadding)
+                .background(Green50).padding(innerPadding)
                 .verticalScroll(
                     rememberScrollState()
                 ),) {
             Column(
                 Modifier
                     .fillMaxWidth()
-                    .height(420.dp)) {
+                    .height(400.dp)) {
                 Weather();
             }
             Column (

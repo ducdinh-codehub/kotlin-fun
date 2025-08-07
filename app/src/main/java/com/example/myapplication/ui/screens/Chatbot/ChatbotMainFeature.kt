@@ -43,7 +43,7 @@ import kotlin.math.roundToInt
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ChatbotMainfeature(navHostController: NavHostController, authModelView: AuthModelView, topBarName: String, drawerState: DrawerState){
+fun ChatbotMainfeature(navHostController: NavHostController, authModelView: AuthModelView, topBarName: String, drawerState: DrawerState, modifier: Modifier){
     val scope = rememberCoroutineScope()
     var menuIconMoveState by remember { mutableStateOf(false) }
     var titleScreenFadeIn by remember {
@@ -75,15 +75,7 @@ fun ChatbotMainfeature(navHostController: NavHostController, authModelView: Auth
         )
     )
 
-    Scaffold(
-        modifier = Modifier.fillMaxSize(),
-        topBar = {
-            TopAppBar(title = { Text("$topBarName") }, navigationIcon = {
-                Icon(Icons.Default.Menu, contentDescription = "Localized description", modifier = Modifier.size(30.dp).clickable { scope.launch { drawerState.apply { if(isClosed) open() else close() } } })
-            })
-        }
-
-    ) {
+    Scaffold {
         innerPadding ->
         Column(Modifier.padding(innerPadding).fillMaxSize()) {
             Column(Modifier.padding(10.dp).fillMaxSize()){

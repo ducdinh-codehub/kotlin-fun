@@ -2,6 +2,7 @@ package com.example.myapplication.ui.screens.News
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
@@ -22,21 +23,15 @@ import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun News(navHostController: NavHostController, authModelView: AuthModelView, topBarName: String, drawerState: DrawerState) {
+fun News(navHostController: NavHostController, authModelView: AuthModelView, topBarName: String, drawerState: DrawerState, modifier: Modifier) {
     val scope = rememberCoroutineScope()
 
     Scaffold(
-        topBar = {
-            TopAppBar(title = { Text(
-                topBarName
-            ) }, navigationIcon = {
-                Icon(Icons.Default.Menu, contentDescription = "Localized description", modifier = Modifier.size(30.dp).clickable { scope.launch { drawerState.apply { if(isClosed) open() else close() } } })
-            })
-        }
+        modifier = modifier
 
-    ) { innerPadding ->
+    ) { paddingValues ->
 
-        Column {
+        Column(Modifier.padding(paddingValues)) {
 
             Button(
                 onClick = {

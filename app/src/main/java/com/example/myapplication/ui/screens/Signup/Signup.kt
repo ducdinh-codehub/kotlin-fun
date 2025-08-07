@@ -27,6 +27,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
@@ -43,6 +44,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.airbnb.lottie.compose.LottieAnimation
 import com.airbnb.lottie.compose.LottieCompositionSpec
@@ -53,9 +57,12 @@ import com.example.myapplication.R
 import com.example.myapplication.ui.AppScreen
 import com.example.myapplication.ui.shared.components.DatePickerModal
 import com.example.myapplication.ui.shared.components.NumberInput
+import com.example.myapplication.ui.shared.components.SubmitButton
 import com.example.myapplication.ui.shared.components.TextInput
 import com.example.myapplication.ui.shared.context.auth.AuthModelView
 import com.example.myapplication.ui.shared.context.auth.FirebaseAuthState
+import com.example.myapplication.ui.shared.dataModel.Account
+import com.example.myapplication.ui.shared.dataModel.AccountModelView
 import com.example.myapplication.ui.shared.utilizeFunctions.getScreenHeight
 import com.example.myapplication.ui.shared.utilizeFunctions.getScreenWidth
 import com.example.myapplication.ui.theme.Blue300
@@ -94,21 +101,29 @@ fun Signup(navHostController: NavHostController, authModelView: AuthModelView){
         openCalendarState = false;
     }
 
-    var username by remember {
-        mutableStateOf("")
+    val accountViewModel: AccountModelView = viewModel()
+
+    val formState by accountViewModel.formObserver.collectAsState()
+
+
+    fun setInitialAccountName(inputText: String) {
+        accountViewModel.setName(inputText)
     }
 
-    var password by remember {
-        mutableStateOf("")
+    fun setInitialAccountPassword(inputText: String) {
+        accountViewModel.setPassword(inputText)
     }
 
-    fun setUsername(inputText: String) {
-        username = inputText
-    }
+    var nextToSignUpSection by remember { mutableStateOf(false) }
 
-    fun setPassword(inputText: String) {
-        password = inputText
-    }
+    var isLoginSuccess : MutableLiveData<Boolean> = MutableLiveData(false);
+
+
+    println("formState"+formState)
+
+
+
+
     Scaffold { innerPadding ->
         Column(modifier = Modifier.fillMaxSize().background(monk01), horizontalAlignment=Alignment.CenterHorizontally) {
 
@@ -117,49 +132,129 @@ fun Signup(navHostController: NavHostController, authModelView: AuthModelView){
             }
 
 
-            Column(modifier = Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally)
+            Column(modifier = Modifier.fillMaxWidth().padding(10.dp), horizontalAlignment = Alignment.CenterHorizontally)
             {
 
                     Column(Modifier.background(Teal200, shape = RoundedCornerShape(26.dp)).padding(35.dp), verticalArrangement = Arrangement.spacedBy(12.dp, Alignment.CenterVertically), horizontalAlignment = Alignment.CenterHorizontally, ) {
                         Text("Let Plant With Us !", fontSize = 25.sp, fontWeight = FontWeight.Bold)
 
                         Column( horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(12.dp, Alignment.CenterVertically)){
-                            TextInput(modifier = Modifier
-                                .width(250.dp)
-                                .clip(
-                                    RoundedCornerShape(25.dp)
-                                ), label = "Username", placeholder = "Enter Username", onTyping = {e -> setUsername(e)}, notAllowEmpty = true)
-                            TextInput(modifier = Modifier
-                                .width(250.dp)
-                                .clip(
-                                    RoundedCornerShape(25.dp)
-                                ), label = "Password", placeholder = "Enter Password", onTyping = {e -> setPassword(e)}, isPasswordField = true, notAllowEmpty = true)
-
-                            Row(
-                                horizontalArrangement = Arrangement.SpaceBetween,
-                                verticalAlignment = Alignment.CenterVertically
-                            ){
-                                NumberInput(modifier = Modifier
-                                    .width(200.dp)
+                            if(!nextToSignUpSection) {
+                                TextInput(modifier = Modifier
+                                    .fillMaxWidth()
                                     .clip(
                                         RoundedCornerShape(25.dp)
-                                    ), label = "Age")
-                                IconButton(
-                                    onClick = { openCalendarState = true },
+                                    ),
+                                    label = "Your first name",
+                                    placeholder = "Enter Your first name",
+                                    onTyping = { e -> setInitialAccountName(e) },
+                                    notAllowEmpty = true,
+                                    isFailToLogin = isLoginSuccess
 
-                                    ) {
-                                    Icon(Icons.Rounded.DateRange, contentDescription = "Localized description", modifier = Modifier.size(25.dp))
+                                )
+
+                                TextInput(modifier = Modifier
+                                    .fillMaxWidth()
+                                    .clip(
+                                        RoundedCornerShape(25.dp)
+                                    ),
+                                    label = "Your middle & last name",
+                                    placeholder = "Enter Your middle & last name",
+                                    onTyping = { e -> setInitialAccountName(e) },
+                                    notAllowEmpty = true,
+                                    isFailToLogin = isLoginSuccess
+                                )
+
+                                TextInput(modifier = Modifier
+                                    .fillMaxWidth()
+                                    .clip(
+                                        RoundedCornerShape(25.dp)
+                                    ),
+                                    label = "Email",
+                                    placeholder = "Enter Your middle & last name",
+                                    onTyping = { e -> setInitialAccountUsername(e) },
+                                    notAllowEmpty = true,
+                                    isFailToLogin = isLoginSuccess
+                                )
+
+                                TextInput(modifier = Modifier
+                                    .fillMaxWidth()
+                                    .clip(
+                                        RoundedCornerShape(25.dp)
+                                    ),
+                                    label = "Phone",
+                                    placeholder = "Enter Your middle & last name",
+                                    onTyping = { e -> setInitialAccountUsername(e) },
+                                    notAllowEmpty = true,
+                                    isFailToLogin = isLoginSuccess
+                                )
+                            }
+                            if(nextToSignUpSection){
+                                TextInput(modifier = Modifier
+                                    .fillMaxWidth()
+                                    .clip(
+                                        RoundedCornerShape(25.dp)
+                                    ), label = "Your account", placeholder = "Enter account", onTyping = {e -> setInitialAccountPassword(e)}, notAllowEmpty = true, isFailToLogin = isLoginSuccess)
+
+                                TextInput(modifier = Modifier
+                                    .fillMaxWidth()
+                                    .clip(
+                                        RoundedCornerShape(25.dp)
+                                    ), label = "Password", placeholder = "Enter Password", onTyping = {e -> setInitialAccountPassword(e)}, isPasswordField = true, notAllowEmpty = true, isFailToLogin = isLoginSuccess)
+                            }
+                            if(!nextToSignUpSection) {
+                                Row(
+                                    horizontalArrangement = Arrangement.SpaceBetween,
+                                    verticalAlignment = Alignment.CenterVertically,
+                                    modifier = Modifier.fillMaxWidth()
+                                ) {
+                                    NumberInput(
+                                        modifier = Modifier
+                                            .width(220.dp)
+                                            .clip(
+                                                RoundedCornerShape(25.dp)
+                                            ), label = "Age"
+                                    )
+                                    IconButton(
+                                        onClick = { openCalendarState = true },
+
+                                        ) {
+                                        Icon(
+                                            Icons.Rounded.DateRange,
+                                            contentDescription = "Localized description",
+                                            modifier = Modifier.size(25.dp)
+                                        )
+                                    }
                                 }
                             }
 
-                            Button(modifier = Modifier.width(250.dp), onClick = {
-                                if(username.isNotEmpty() && password.isNotEmpty()){
-                                    authModelView.signUp(username, password);
-                                }
+                            if(nextToSignUpSection){
+                                Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceAround){
+                                    Button(modifier = Modifier.width(120.dp), onClick = {
+                                        nextToSignUpSection = false
 
-                            }, colors = ButtonDefaults.buttonColors(containerColor = black) ){
-                                Text("Sign up")
+                                    }, colors = ButtonDefaults.buttonColors(containerColor = black) ){
+                                        Text("Prev")
+                                    }
+                                    Button(modifier = Modifier.width(120.dp), onClick = {
+
+
+                                    }, colors = ButtonDefaults.buttonColors(containerColor = black) ){
+                                        Text("Sign up")
+                                    }
+                                }
+                            }else{
+                                Button(modifier = Modifier.width(250.dp), onClick = {
+                                    //if(isLoginSuccess.value == true){
+                                        nextToSignUpSection = true
+                                    //}
+
+                                }, colors = ButtonDefaults.buttonColors(containerColor = black) ){
+                                    Text("Next")
+                                }
                             }
+
+
 
                             Row(verticalAlignment = Alignment.CenterVertically){
                                 Text("I already had account.", modifier = Modifier.clickable { navHostController.popBackStack() }, textDecoration = TextDecoration.Underline, fontWeight = FontWeight.Bold)

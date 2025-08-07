@@ -153,15 +153,18 @@ fun ChatbotIntro(navHostController: NavHostController){
 
 
             }
-            Row(modifier = Modifier.fillMaxWidth().background(color= Grey200, shape = RoundedCornerShape(70f)).height(50.dp).padding(10.dp).clickable { navHostController.navigate( AppScreen.Smartbot.name ) }, verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.SpaceBetween) {
-                Text("Start new chat", color = Color.Black, fontWeight = FontWeight.SemiBold, fontSize = 14.sp)
-                Box(Modifier.background(color = Teal100, shape = CircleShape).size(30.dp).padding(7.dp)){
-                    Icon(
-                        painter = painterResource(id = R.drawable.arrow_right_alt_24dp),
-                        contentDescription = "",
-                    )
+            Column(modifier = Modifier.fillMaxWidth().height(300.dp), verticalArrangement = Arrangement.Center) {
+                Row(modifier = Modifier.fillMaxWidth().background(color= Grey200, shape = RoundedCornerShape(70f)).height(50.dp).padding(10.dp).clickable { navHostController.navigate( AppScreen.Smartbot.name ) }, verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.SpaceBetween) {
+                    Text("Start new chat", color = Color.Black, fontWeight = FontWeight.SemiBold, fontSize = 14.sp)
+                    Box(Modifier.background(color = Teal100, shape = CircleShape).size(30.dp).padding(7.dp)){
+                        Icon(
+                            painter = painterResource(id = R.drawable.arrow_right_alt_24dp),
+                            contentDescription = "",
+                        )
+                    }
                 }
             }
+
 
         }
     }

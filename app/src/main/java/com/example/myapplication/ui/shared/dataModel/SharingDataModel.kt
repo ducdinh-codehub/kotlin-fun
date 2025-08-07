@@ -62,3 +62,18 @@ data class Sys(
     val sunrise: Long,
     val sunset: Long
 )
+
+@Serializable
+data class Account(
+    var name: String,
+    var middleLastName: String,
+    var fullName: String,
+    var email: String,
+    var phone: String?,
+    var age: Int,
+    var createdAt: String,
+    var updatedAt: String,
+    var imageAvatar: String,
+    var username: String,
+    var password: String
+)

@@ -153,7 +153,7 @@ fun Weather(){
             }
         }
         Row(Modifier.fillMaxWidth().height(130.dp), horizontalArrangement = Arrangement.SpaceBetween) {
-            Column(Modifier.width(200.dp).fillMaxHeight().background(Color.White, shape = RoundedCornerShape(15.dp)).padding(25.dp)) {
+            Column(Modifier.width(235.dp).fillMaxHeight().background(Color.White, shape = RoundedCornerShape(15.dp)).padding(25.dp)) {
                 Box(Modifier.background(color = Grey100, shape = RoundedCornerShape(15.dp)).padding(2.dp)) {
                     Row(Modifier.padding(5.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.SpaceBetween) {
                         Icon(painterResource(R.drawable.rainy_24dp), contentDescription = "Localized description", Modifier.background(

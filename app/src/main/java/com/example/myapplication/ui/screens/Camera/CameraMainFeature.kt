@@ -74,7 +74,7 @@ import org.intellij.lang.annotations.JdkConstants.HorizontalAlignment
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CameraMainFeature(navHostController: NavHostController, authModelView: AuthModelView, topBarName: String, drawerState: DrawerState){
+fun CameraMainFeature(navHostController: NavHostController, authModelView: AuthModelView, topBarName: String, drawerState: DrawerState, modifier: Modifier){
     val scope = rememberCoroutineScope()
 
     val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.plantdetect2)) // Replace with your file
@@ -98,17 +98,11 @@ fun CameraMainFeature(navHostController: NavHostController, authModelView: AuthM
     )
 
     Scaffold(
-        topBar = {
-            TopAppBar(title = { Text(
-                "Smart detect"
-            ) }, navigationIcon = {
-                Icon(Icons.Default.Menu, contentDescription = "Localized description", modifier = Modifier.size(30.dp).clickable { scope.launch { drawerState.apply { if(isClosed) open() else close() } } })
-            })
-        }
+        modifier = modifier
 
     ){
-        innerPadding ->
-        Column(Modifier.padding(innerPadding).fillMaxSize().background(Brush.linearGradient(colorStops = colorStops)), horizontalAlignment = Alignment.CenterHorizontally) {
+        paddingValues ->
+        Column(Modifier.padding(paddingValues).fillMaxSize().background(Brush.linearGradient(colorStops = colorStops)), horizontalAlignment = Alignment.CenterHorizontally) {
             Column(Modifier.fillMaxSize().padding(5.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
 
                 Column(Modifier.fillMaxWidth().padding(horizontal = 10.dp, vertical = 25.dp)) {

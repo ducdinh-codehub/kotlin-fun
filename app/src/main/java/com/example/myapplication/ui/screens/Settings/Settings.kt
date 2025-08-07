@@ -2,6 +2,7 @@ package com.example.myapplication.ui.screens.Settings
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
@@ -22,21 +23,12 @@ import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun Settings(navHostController: NavHostController, authModelView: AuthModelView, topBarName: String, drawerState: DrawerState) {
+fun Settings(navHostController: NavHostController, authModelView: AuthModelView, topBarName: String, drawerState: DrawerState, modifier: Modifier) {
     val scope = rememberCoroutineScope()
 
-    Scaffold(
-        topBar = {
-            TopAppBar(title = { Text(
-                topBarName
-            ) }, navigationIcon = {
-                Icon(Icons.Default.Menu, contentDescription = "Localized description", modifier = Modifier.size(30.dp).clickable { scope.launch { drawerState.apply { if(isClosed) open() else close() } } })
-            })
-        }
+    Scaffold{ innerPadding ->
 
-    ) { innerPadding ->
-
-        Column {
+        Column(Modifier.padding(innerPadding)) {
 
             Button(
                 onClick = {

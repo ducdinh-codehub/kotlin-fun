@@ -8,8 +8,10 @@ import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.AddCircle
@@ -24,6 +26,7 @@ import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Button
 import androidx.compose.material3.DrawerState
 import androidx.compose.material3.DrawerValue
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalDrawerSheet
@@ -35,11 +38,16 @@ import androidx.compose.material3.NavigationDrawerItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
@@ -91,22 +99,44 @@ fun currentRoute(navController: NavHostController): String? {
     return navBackStackEntry?.arguments?.getString(navController.currentBackStackEntry?.destination?.route)
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun Navigation(authModelView: AuthModelView, drawerState: DrawerState){
     val navController = rememberNavController();
+
+    val navBackStackEntry by navController.currentBackStackEntryAsState()
+
+    var currentRoute by remember { mutableStateOf("Home") }
+
+    LaunchedEffect(navBackStackEntry) {
+        currentRoute = navBackStackEntry?.destination?.route.toString()
+    }
+
     val startDestination = AppScreen.Home
     var selectedDestination by rememberSaveable { mutableIntStateOf(startDestination.ordinal) }
-    println("Success loading")
+
     val isAuth : Boolean by authModelView.authState.observeAsState(false);
-    val currentRoute = navController.currentBackStackEntry?.destination?.route
     val scope = rememberCoroutineScope();
 
-    val bottomBarItemList = listOf(AppScreen.Home.name, AppScreen.News.name, AppScreen.Settings.name, AppScreen.SmartbotMainFeature.name);
+    val bottomBarItemList = listOf(AppScreen.Home.name, AppScreen.News.name, AppScreen.Settings.name);
     val sideDrawerItemList = listOf(AppScreen.Home.name, AppScreen.News.name, AppScreen.SmartbotMainFeature.name, AppScreen.Settings.name,AppScreen.Signup.name)
-
     if(isAuth){
         Scaffold (
-            modifier = Modifier.fillMaxSize(),
+            Modifier.windowInsetsPadding(WindowInsets.safeDrawing).fillMaxSize(),
+            topBar = {
+                TopAppBar(title = {
+                    if(currentRoute == AppScreen.SmartbotMainFeature.name){
+                        Text("Smartbot")
+                    }else{
+                        Text(currentRoute)
+
+                    }
+                }, navigationIcon = {
+                    Icon(Icons.Default.Menu, contentDescription = "Localized description", modifier = Modifier
+                        .size(30.dp)
+                        .clickable { scope.launch { drawerState.apply { if (isClosed) open() else close() } } })
+                })
+            },
             bottomBar = {
                 if(currentRoute in bottomBarItemList){
                     NavigationBar(windowInsets = WindowInsets(0, 0, 0, 0), containerColor =  Grey50) {
@@ -134,8 +164,9 @@ fun Navigation(authModelView: AuthModelView, drawerState: DrawerState){
                 }
             }
         ){
-            contentPadding ->
+            paddingValues ->
             ModalNavigationDrawer(
+                modifier = Modifier.padding(paddingValues),
                 drawerState = drawerState,
                 drawerContent = {
                     ModalDrawerSheet {
@@ -168,25 +199,25 @@ fun Navigation(authModelView: AuthModelView, drawerState: DrawerState){
             ){
                 NavHost(navController, startDestination.name) {
                     composable(route= AppScreen.Home.name){
-                        Home(navController, authModelView, AppScreen.Home.name, drawerState)
+                        Home(navController, authModelView, AppScreen.Home.name, drawerState, Modifier.padding(paddingValues))
                     }
                     composable(route= AppScreen.Settings.name){
-                        Settings(navController, authModelView, AppScreen.Settings.name, drawerState)
+                        Settings(navController, authModelView, AppScreen.Settings.name, drawerState, Modifier.padding(paddingValues))
                     }
                     composable(route= AppScreen.News.name){
-                        News(navController, authModelView, AppScreen.News.name, drawerState)
+                        News(navController, authModelView, AppScreen.News.name, drawerState, Modifier.padding(paddingValues))
                     }
                     composable(route = AppScreen.Camera.name){
-                        Camera(navController, authModelView, AppScreen.Camera.name, drawerState)
+                        Camera(navController, authModelView, AppScreen.Camera.name, drawerState, Modifier.padding(paddingValues))
                     }
                     composable(route = AppScreen.Smartbot.name){
-                        Chatbot(navController, authModelView, AppScreen.Smartbot.name, drawerState)
+                        Chatbot(navController, authModelView, AppScreen.Smartbot.name, drawerState, Modifier.padding(paddingValues))
                     }
                     composable(route = AppScreen.CameraMainFeature.name){
-                        CameraMainFeature(navController, authModelView, AppScreen.CameraMainFeature.name, drawerState)
+                        CameraMainFeature(navController, authModelView, AppScreen.CameraMainFeature.name, drawerState, Modifier.padding(paddingValues))
                     }
                     composable(route = AppScreen.SmartbotMainFeature.name) {
-                        ChatbotMainfeature(navController, authModelView, "Smartbot", drawerState)
+                        ChatbotMainfeature(navController, authModelView, "Smartbot", drawerState, Modifier.padding(paddingValues))
 
                     }
                 }

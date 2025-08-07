@@ -1,6 +1,7 @@
 package com.example.myapplication.ui.screens.Chatbot
 
 import android.annotation.SuppressLint
+import android.view.ViewTreeObserver
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.animateIntOffsetAsState
@@ -15,6 +16,7 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.defaultMinSize
@@ -89,6 +91,18 @@ import com.example.myapplication.ui.shared.api.ChatbotClient
 import com.example.myapplication.ui.theme.Blue50
 import com.example.myapplication.ui.theme.Grey50
 import com.example.myapplication.ui.theme.Teal100
+import androidx.compose.foundation.layout.imePadding
+import androidx.compose.foundation.layout.isImeVisible
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.ui.platform.LocalView
+import androidx.compose.ui.text.input.ImeAction
+
+import androidx.activity.enableEdgeToEdge
+
+
+
 
 class InputMessage : ViewModel(){
     private val _senderMessage =  MutableLiveData<String>("From user");
@@ -110,6 +124,7 @@ class InputMessage : ViewModel(){
 val ListOfAllMessage = mutableListOf<InputMessage>()
 
 
+
 @Composable
 fun GetInputData(text: String) {
     Column{
@@ -125,21 +140,20 @@ fun GetInputData(text: String) {
 
 
 val ListOfAllMessage2 = mutableListOf<String>("Item1", "Item2", "Item3")
+enum class Keyboard {
+    Opened, Closed
+}
 
 @SuppressLint("RememberReturnType")
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @Composable
-fun Chatbot(navHostController: NavHostController, authModelView: AuthModelView, topBarName: String, drawerState: DrawerState){
+fun Chatbot(navHostController: NavHostController, authModelView: AuthModelView, topBarName: String, drawerState: DrawerState, modifier: Modifier){
 
     var listItemsOpen by remember { mutableStateOf(listOf<String>("Item1", "Item2", "Item3")) }
 
     var listMessage by remember { mutableStateOf(listOf<InputMessage>()) }
 
     var isLoadingBotResp by remember { mutableStateOf(false) }
-
-
-
-
 
 
     val scope = rememberCoroutineScope()
@@ -197,26 +211,33 @@ fun Chatbot(navHostController: NavHostController, authModelView: AuthModelView, 
         isPlaying = true,
     )
 
+    val keyboardState by remember { mutableStateOf(false) }
 
-    Scaffold(
-        topBar = {
-            Modifier.fillMaxSize()
-            TopAppBar(title = { Text("$topBarName - Meofarm:2.0") }, navigationIcon = {
-                Icon(Icons.Default.Menu, contentDescription = "Localized description", modifier = Modifier.size(30.dp).clickable { scope.launch { drawerState.apply { if(isClosed) open() else close() } } })
-            })
-        }
-
-    ) {
+    Scaffold {
         innerPadding ->
         Column(Modifier.fillMaxSize().padding(innerPadding)) {
             Column(Modifier.fillMaxWidth().padding(5.dp)) {
-                LazyColumn(Modifier.weight(1f).height(300.dp)) {
+
+                LazyColumn(Modifier.weight(1f).height(300.dp).imePadding()) {
                     items(listMessage) { item ->
                         Column(verticalArrangement = Arrangement.SpaceAround) {
-                            Box(modifier = Modifier.defaultMinSize(minHeight = 100.dp).fillMaxWidth().padding(10.dp)) {
-                                Box(modifier = Modifier.background(color = Blue50, shape = RoundedCornerShape(80f)).fillMaxWidth().defaultMinSize(minHeight = 50.dp).padding(12.dp)){
+                            Box(
+                                modifier = Modifier.defaultMinSize(minHeight = 100.dp)
+                                    .fillMaxWidth().padding(10.dp)
+                            ) {
+                                Box(
+                                    modifier = Modifier.background(
+                                        color = Blue50,
+                                        shape = RoundedCornerShape(80f)
+                                    ).fillMaxWidth().defaultMinSize(minHeight = 50.dp)
+                                        .padding(12.dp)
+                                ) {
                                     Column(verticalArrangement = Arrangement.spacedBy(15.dp)) {
-                                        Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp), modifier = Modifier.padding(2.dp)) {
+                                        Row(
+                                            verticalAlignment = Alignment.CenterVertically,
+                                            horizontalArrangement = Arrangement.spacedBy(10.dp),
+                                            modifier = Modifier.padding(2.dp)
+                                        ) {
                                             Icon(
                                                 painter = painterResource(id = R.drawable.user_attributes_24dp),
                                                 contentDescription = "",
@@ -231,10 +252,18 @@ fun Chatbot(navHostController: NavHostController, authModelView: AuthModelView, 
 
                             Box(Modifier.height(15.dp))
 
-                            Box(Modifier.fillMaxWidth().defaultMinSize(minHeight = 200.dp).background(
-                                Grey100).padding(15.dp)){
+                            Box(
+                                Modifier.fillMaxWidth().defaultMinSize(minHeight = 200.dp)
+                                    .background(
+                                        Grey100
+                                    ).padding(15.dp)
+                            ) {
                                 Column(verticalArrangement = Arrangement.spacedBy(15.dp)) {
-                                    Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp), modifier = Modifier.padding(2.dp)) {
+                                    Row(
+                                        verticalAlignment = Alignment.CenterVertically,
+                                        horizontalArrangement = Arrangement.spacedBy(10.dp),
+                                        modifier = Modifier.padding(2.dp)
+                                    ) {
                                         Icon(
                                             painter = painterResource(id = R.drawable.chat_apps_script_24dp),
                                             contentDescription = "",
@@ -243,9 +272,14 @@ fun Chatbot(navHostController: NavHostController, authModelView: AuthModelView, 
                                         Text("Bot:")
                                     }
 
-                                    if(isLoadingBotResp){
-                                        LottieAnimation(composition=composition, progress= progress, modifier = Modifier.size(200.dp).align(Alignment.CenterHorizontally))
-                                    }else{
+                                    if (isLoadingBotResp) {
+                                        LottieAnimation(
+                                            composition = composition,
+                                            progress = progress,
+                                            modifier = Modifier.size(200.dp)
+                                                .align(Alignment.CenterHorizontally)
+                                        )
+                                    } else {
                                         Text(item.botMessage.value)
                                     }
 
@@ -253,9 +287,6 @@ fun Chatbot(navHostController: NavHostController, authModelView: AuthModelView, 
 
                             }
                         }
-
-
-
                     }
                 }
                 Row(horizontalArrangement = Arrangement.spacedBy(10.dp), verticalAlignment = Alignment.CenterVertically){
@@ -264,9 +295,8 @@ fun Chatbot(navHostController: NavHostController, authModelView: AuthModelView, 
                         onValueChange = { textValue = it },
                         modifier = Modifier.width(320.dp).background(color= Grey300,
                             shape = RoundedCornerShape(200.dp) // Apply rounded corners
-                        ).height(55.dp).padding(15.dp).align(Alignment.CenterVertically),
+                        ).height(55.dp).padding(15.dp).align(Alignment.CenterVertically).imePadding(),
                         textStyle = TextStyle(color = Color.Black, fontSize = 18.sp),
-
                     )
 
                     Box(Modifier.background(color = Teal100, shape = CircleShape).size(40.dp).padding(7.dp).clickable {

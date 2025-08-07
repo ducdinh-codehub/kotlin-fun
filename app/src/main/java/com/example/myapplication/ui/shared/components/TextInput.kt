@@ -21,7 +21,10 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.myapplication.R
+import com.example.myapplication.ui.shared.dataModel.Account
+import com.example.myapplication.ui.shared.dataModel.AccountModelView
 import com.example.myapplication.ui.theme.Grey
 import com.example.myapplication.ui.theme.Grey200
 import com.example.myapplication.ui.theme.Grey400
@@ -31,16 +34,19 @@ import com.example.myapplication.ui.theme.Grey600
 import com.example.myapplication.ui.theme.Red
 
 @Composable
-fun TextInput(inputValue:String = "",
-              label: String= "Default-text-input",
-              placeholder: String = "Enter-text",
-              modifier: Modifier = Modifier,
-              modifierInlineTextStyle: Modifier = Modifier,
-              isPasswordField: Boolean = false,
-              isReadOnly:Boolean = false,
-              onTyping : (inputText: String) -> Unit,
-              notAllowEmpty: Boolean = false,
-              isFailToLogin: MutableLiveData<Boolean> = MutableLiveData(false)
+fun TextInput(
+    inputId: String = "",
+    inputValue:String = "",
+    label: String= "Default-text-input",
+    placeholder: String = "Enter-text",
+    modifier: Modifier = Modifier,
+    modifierInlineTextStyle: Modifier = Modifier,
+    isPasswordField: Boolean = false,
+    isReadOnly:Boolean = false,
+    onSignUpObserveViewModel: AccountModelView = viewModel(),
+    onTyping : (inputText: String) -> Unit,
+    notAllowEmpty: Boolean = false,
+    isFailToLogin: MutableLiveData<Boolean> = MutableLiveData(false),
 ) {
     var enteredText by remember { mutableStateOf("") }// Declare a mutable state for the text
     var passwordVisible by remember { mutableStateOf(false) }
@@ -53,6 +59,7 @@ fun TextInput(inputValue:String = "",
                 enteredText = newText
                 println("enteredText"+enteredText)
                 onTyping(newText)
+
 
             },
             placeholder = { Text(placeholder, color = if(notAllowEmpty && isFailToLogin.value) Red else Grey600) },

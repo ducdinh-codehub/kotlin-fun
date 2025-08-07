@@ -51,7 +51,7 @@ import androidx.compose.runtime.setValue
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalPermissionsApi::class)
 @Composable
-fun Camera(navHostController: NavHostController, authModelView: AuthModelView, topBarName: String, drawerState: DrawerState){
+fun Camera(navHostController: NavHostController, authModelView: AuthModelView, topBarName: String, drawerState: DrawerState, modifier: Modifier){
     println("HELLO CAMERA")
     val scope = rememberCoroutineScope()
     val context = LocalContext.current
@@ -65,16 +65,10 @@ fun Camera(navHostController: NavHostController, authModelView: AuthModelView, t
 
     val cameraController: LifecycleCameraController = remember { LifecycleCameraController(context) }
     Scaffold(
-        topBar = {
-            TopAppBar(title = { Text(
-                topBarName
-            ) }, navigationIcon = {
-                Icon(Icons.Default.Menu, contentDescription = "Localized description", modifier = Modifier.size(30.dp).clickable { scope.launch { drawerState.apply { if(isClosed) open() else close() } } })
-            })
-        }
+        modifier = modifier
 
-    ) { innerPadding ->
-        Column(Modifier.padding(innerPadding).fillMaxSize()) {
+    ) { paddingValues ->
+        Column(Modifier.padding(paddingValues).fillMaxSize()) {
             when (cameraPermissionState.status) {
                 is PermissionStatus.Granted -> {
                     showDialog = false;
