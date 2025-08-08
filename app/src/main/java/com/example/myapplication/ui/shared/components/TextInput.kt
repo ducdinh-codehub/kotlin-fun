@@ -33,9 +33,11 @@ import com.example.myapplication.ui.theme.Grey500
 import com.example.myapplication.ui.theme.Grey600
 import com.example.myapplication.ui.theme.Red
 
+
+
 @Composable
 fun TextInput(
-    inputId: String = "",
+    inputName: String = "",
     inputValue:String = "",
     label: String= "Default-text-input",
     placeholder: String = "Enter-text",
@@ -47,7 +49,25 @@ fun TextInput(
     onTyping : (inputText: String) -> Unit,
     notAllowEmpty: Boolean = false,
     isFailToLogin: MutableLiveData<Boolean> = MutableLiveData(false),
+    savingModeIndex: Int = 0
 ) {
+    val savingModeCategory = listOf(
+        "default-mode",
+        "signup-mode",
+        "login-mode"
+    )
+
+    fun setSignUpFormValue(key: String = "", value: Any? = ""){
+        when(key){
+            "name" -> onSignUpObserveViewModel.setName(value.toString())
+            "middleLastName" -> onSignUpObserveViewModel.setMiddleLastName(value.toString())
+            "age" -> onSignUpObserveViewModel.setAge(value.toString().toInt())
+            "email" -> onSignUpObserveViewModel.setEmail(value.toString())
+            "phone" -> onSignUpObserveViewModel.setPhone(value.toString())
+            "username" -> onSignUpObserveViewModel.setUsername(value.toString())
+            "password" -> onSignUpObserveViewModel.setPassword(value.toString())
+        }
+    }
     var enteredText by remember { mutableStateOf("") }// Declare a mutable state for the text
     var passwordVisible by remember { mutableStateOf(false) }
     if(isPasswordField){
@@ -57,10 +77,10 @@ fun TextInput(
             label={ Text(text=label, modifier= Modifier.width(550.dp), color = if(notAllowEmpty && isFailToLogin.value) Red else Grey600) },
             onValueChange = { newText ->
                 enteredText = newText
-                println("enteredText"+enteredText)
-                onTyping(newText)
-
-
+                if(savingModeCategory[savingModeIndex] == savingModeCategory[1]){
+                    // Saving value for signup form
+                    setSignUpFormValue(inputName, newText)
+                }
             },
             placeholder = { Text(placeholder, color = if(notAllowEmpty && isFailToLogin.value) Red else Grey600) },
             modifier = modifier,
@@ -84,13 +104,15 @@ fun TextInput(
             label={ Text(text=label, modifier= Modifier.width(550.dp), color = if(notAllowEmpty && isFailToLogin.value) Red else Grey600) },
             onValueChange = { newText ->
                 enteredText = newText
-                onTyping(newText)
+                if(savingModeCategory[savingModeIndex] == savingModeCategory[1]){
+                    // Saving value for signup form
+                    setSignUpFormValue(inputName, newText)
+                }
             },
             placeholder = { Text(placeholder, color = if(notAllowEmpty && isFailToLogin.value) Red else Grey600) },
             modifier = modifier,
             readOnly=isReadOnly,
             leadingIcon = { Icon(imageVector = Icons.Default.AccountCircle, contentDescription = "") }
-
         )
     }
 

@@ -12,7 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun NumberInput(inputValue:Int = 0, label: String= "Default-number-input", placeholder: String = "Enter-number", modifier: Modifier = Modifier, modifierInlineTextStyle: Modifier = Modifier, isReadOnly: Boolean = false) {
+fun NumberInput(inputValue:Int? = 0, label: String= "Default-number-input", placeholder: String = "Enter-number", modifier: Modifier = Modifier, modifierInlineTextStyle: Modifier = Modifier, isReadOnly: Boolean = false) {
     TextField(
         value = inputValue.toString(),
         label={ Text(text=label, modifier= Modifier.width(550.dp)) },

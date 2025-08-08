@@ -1,11 +1,12 @@
 package com.example.myapplication.ui.shared.dataModel
 
 import androidx.compose.runtime.remember
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 
 class AccountModelView : ViewModel() {
-    private val _formObserver =  MutableStateFlow(Account(
+    private val _formObserver =  MutableLiveData(Account(
         name = "",
         middleLastName = "",
         fullName = "",
@@ -19,7 +20,7 @@ class AccountModelView : ViewModel() {
         password = ""
     ))
 
-    val formObserver : MutableStateFlow<Account> = _formObserver
+    val formObserver : MutableLiveData<Account> = _formObserver
 
     fun setName(input: String){
         _formObserver.value = _formObserver.value.copy(name = input.lowercase())
@@ -35,6 +36,10 @@ class AccountModelView : ViewModel() {
 
     fun setEmail(input: String){
         _formObserver.value = _formObserver.value.copy(email = input)
+    }
+
+    fun setPhone(input: String){
+        _formObserver.value = _formObserver.value.copy(phone = input)
     }
 
     fun setAge(input: Int){
